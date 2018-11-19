@@ -109,10 +109,23 @@ namespace HoloLensWithOpenCVForUnityExample
             quad_renderer.sharedMaterial.SetVector ("_VignetteOffset", new Vector4(clippingOffset.x, clippingOffset.y));
 
             Matrix4x4 projectionMatrix;
-            #if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
+#if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
             projectionMatrix = webCamTextureToMatHelper.GetProjectionMatrix ();
             quad_renderer.sharedMaterial.SetMatrix ("_CameraProjectionMatrix", projectionMatrix);
-            #else
+#else
+
+
+            //19n
+            Matrix4x4 projectionMatrix2 = webCamTextureToMatHelper.GetProjectionMatrix();
+            Matrix4x4 camera2WorldMatrix = webCamTextureToMatHelper.GetCameraToWorldMatrix();
+
+            HoloLensCameraStream.Resolution _resolution = CameraStreamHelper.Instance.GetLowestResolution();
+
+            Vector3 imageCenterDirection = LocatableCameraUtils.PixelCoordToWorldCoord(camera2WorldMatrix, projectionMatrix2, _resolution, new Vector2(_resolution.width / 2, _resolution.height / 2));
+            Vector3 imageBotRightDirection = LocatableCameraUtils.PixelCoordToWorldCoord(camera2WorldMatrix, projectionMatrix2, _resolution, new Vector2(_resolution.width, _resolution.height));
+            //_laser.ShootLaserFrom(camera2WorldMatrix.GetColumn(3), imageBotRightDirection, 10f, _botRightMaterial);
+            Debug.Log(imageBotRightDirection);
+            //
 
             //HL
             //This value is obtained from PhotoCapture's TryGetProjectionMatrix() method.I do not know whether this method is good.
