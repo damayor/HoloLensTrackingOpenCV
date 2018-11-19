@@ -21,26 +21,6 @@ namespace HoloLensWithOpenCVForUnityExample
         /// </summary>
         Mat grayMat;
 
-        ///// <summary>
-        ///// The line mat.
-        ///// </summary>
-        //Mat lineMat;
-
-        ///// <summary>
-        ///// The mask mat.
-        ///// </summary>
-        //Mat maskMat;
-
-        ///// <summary>
-        ///// The background mat.
-        ///// </summary>
-        //Mat bgMat;
-
-        ///// <summary>
-        ///// The dst mat.
-        ///// </summary>
-        //Mat dstMat;
-
         /// <summary>
         /// The gray pixels.
         /// </summary>
@@ -68,11 +48,17 @@ namespace HoloLensWithOpenCVForUnityExample
         HololensCameraStreamToMatHelper webCamTextureToMatHelper;
 
         OpenCVForUnity.Rect processingAreaRect;
+
         public Vector2 outsideClippingRatio = new Vector2(0.17f, 0.19f);
         public Vector2 clippingOffset = new Vector2(0.043f, -0.025f);
         public float vignetteScale = 1.5f;
 
+
         //Mat dstMatClippingROI;
+
+
+        public TextMesh textMesh;
+
 
         // Use this for initialization
         protected override void Start ()
@@ -113,28 +99,9 @@ namespace HoloLensWithOpenCVForUnityExample
             processingAreaRect = processingAreaRect.intersect (new OpenCVForUnity.Rect(0,0,webCamTextureMat.cols (),webCamTextureMat.rows ()));
 
 
-            //dstMat = new Mat (webCamTextureMat.rows (), webCamTextureMat.cols (), CvType.CV_8UC1);
-            //dstMatClippingROI = new Mat (dstMat, processingAreaRect);
-
-            //// fill all black.
-            ////Imgproc.rectangle (dstMat, new Point (0, 0), new Point (dstMat.width (), dstMat.height ()), new Scalar (0, 0, 0, 0), -1);
-
-
-            grayMat = /*new Mat (dstMatClippingROI.rows (), dstMatClippingROI.cols (), CvType.CV_8UC1);*/
-            new Mat(webCamTextureMat.rows(), webCamTextureMat.cols(), CvType.CV_8UC1);
-            //lineMat = new Mat (dstMatClippingROI.rows (), dstMatClippingROI.cols (), CvType.CV_8UC1);
-            //maskMat = new Mat (dstMatClippingROI.rows (), dstMatClippingROI.cols (), CvType.CV_8UC1);
-
-            ////create a striped background.
-            //bgMat = new Mat (dstMatClippingROI.rows (), dstMatClippingROI.cols (), CvType.CV_8UC1, new Scalar (255));
-            //for (int i = 0; i < bgMat.rows ()*2.5f; i=i+4) {
-            //    Imgproc.line (bgMat, new Point (0, 0 + i), new Point (bgMat.cols (), -bgMat.cols () + i), new Scalar (0), 1);
-            //}
-
-            //grayPixels = new byte[grayMat.cols () * grayMat.rows () * grayMat.channels ()];
-            //maskPixels = new byte[maskMat.cols () * maskMat.rows () * maskMat.channels ()];
-
-
+            grayMat =  new Mat(webCamTextureMat.rows(), webCamTextureMat.cols(), CvType.CV_8UC1);
+          
+            //
 
             //HL
             quad_renderer = gameObject.GetComponent<Renderer> () as Renderer;
@@ -220,6 +187,8 @@ namespace HoloLensWithOpenCVForUnityExample
 
             Imgproc.cvtColor (bgraMat /*bgraMatClipROI*/, grayMat, Imgproc.COLOR_BGRA2GRAY);
 
+             textMesh.text = "onFrameAquired";
+
             //bgMat.copyTo (dstMatClippingROI);
 
             //Imgproc.GaussianBlur (grayMat, lineMat, new Size (3, 3), 0);
@@ -298,6 +267,8 @@ namespace HoloLensWithOpenCVForUnityExample
                 //Mat rgbaMatClipROI = new Mat(rgbaMat, processingAreaRect);
 
                 Imgproc.cvtColor (rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
+
+                // todo lo nuevo
 
                 //bgMat.copyTo (dstMatClippingROI);
 
