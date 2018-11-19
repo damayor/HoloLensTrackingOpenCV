@@ -1,45 +1,62 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
-
 using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.UI;
 
-#if UNITY_5_3 || UNITY_5_3_OR_NEWER
-using UnityEngine.SceneManagement;
-#endif
 using OpenCVForUnity;
 
-namespace OpenCVForUnityExample
+using System.Linq;
+using System.Collections.Generic;
+using UnityEngine.EventSystems;
+using UnityEngine.XR.WSA.Input;
+using HoloToolkit.Unity.InputModule;
+
+namespace HoloLensWithOpenCVForUnityExample
 {
     /// <summary>
-    /// Skeleton to start developing on OpenCVForUnity
-    ///OpenCV program for testing different trackers.
-    ///  It is based on code from [https://www.learnopencv.com/object-tracking-using-opencv-cpp-python/]
-    /// 
+    /// HoloLens Comic Filter Example
+    /// An example of image processing (comic filter) using OpenCVForUnity on Hololens.
+    /// Referring to http://dev.classmethod.jp/smartphone/opencv-manga-2/.
     /// </summary>
-    [RequireComponent(typeof(WebCamTextureToMatHelper))]
-    public class HoloLensCamTracker : MonoBehaviour
-    // It depends of is used the webcam (WebCamTextureToMatHelper) or a video (VideoCapture
+    [RequireComponent(typeof(HololensCameraStreamToMatHelper))]
+    public class HoloLensCamTracker : ExampleSceneBase
     {
-        /// <summary>
-        /// The texture.
-        /// </summary>
-        Texture2D texture;
-
-        /// <summary>
-        /// The webcam texture to mat helper.
-        /// </summary>
-        WebCamTextureToMatHelper webCamTextureToMatHelper;
-
         /// <summary>
         /// The gray mat.
         /// </summary>
         Mat grayMat;
 
         /// <summary>
-        /// The FPS monitor.
+        /// The gray pixels.
         /// </summary>
-        FpsMonitor fpsMonitor;
+        byte[] grayPixels;
+
+        /// <summary>
+        /// The mask pixels.
+        /// </summary>
+        byte[] maskPixels;
+
+        /// <summary>
+        /// The texture.
+        /// </summary>
+        Texture2D texture;
+
+        /// <summary>
+        /// The quad renderer.
+        /// </summary>
+        /// //new hololens
+        Renderer quad_renderer;
+
+        /// <summary>
+        /// The web cam texture to mat helper.
+        /// </summary>
+        HololensCameraStreamToMatHelper webCamTextureToMatHelper;
+
+        OpenCVForUnity.Rect processingAreaRect;
+
+        public Vector2 outsideClippingRatio = new Vector2(0.17f, 0.19f);
+        public Vector2 clippingOffset = new Vector2(0.043f, -0.025f);
+        public float vignetteScale = 1.5f;
+
 
 
         /// <summary> 
@@ -48,10 +65,9 @@ namespace OpenCVForUnityExample
         Point storedTouchPoint;
 
         /// <summary>
-        /// The quad renderer.
+        /// The selected point list.
         /// </summary>
-        Renderer quad_renderer;
-
+        List<Point> selectedPointList;
 
         string[] tracker_types = { "BOOSTING", "MIL", "KCF", "TLD", "MEDIANFLOW", "GOTURN", "MOSSE", "CSRT" };
 
@@ -59,51 +75,31 @@ namespace OpenCVForUnityExample
 
         Rect2d bbox;
 
+        public TrackerType tracker_type ;
 
-        /// <summary>
-        /// The selected point list.
-        /// </summary>
-        List<Point> selectedPointList;
+        //Tap Event
+        GestureRecognizer m_GestureRecognizer;
 
-        public TrackerType tracker_type = TrackerType.KCF;
+        bool tap;
 
-        //esto creo que si toca
-        //OpenCVForUnity.Rect processingAreaRect;
-        //public Vector2 outsideClippingRatio = new Vector2(0.17f, 0.19f);
-        //public Vector2 clippingOffset = new Vector2(0.043f, -0.025f);
-        //public float vignetteScale = 1.5f;
+        public TextMesh textMesh;
 
 
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                float rearCameraRequestedFPS;
-#endif
 
         // Use this for initialization
-        void Start()
+        protected override void Start()
         {
-            fpsMonitor = GetComponent<FpsMonitor>();
+            base.Start();
 
-            webCamTextureToMatHelper = gameObject.GetComponent<WebCamTextureToMatHelper>();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-            // Set the requestedFPS parameter to avoid the problem of the WebCamTexture image becoming low light on some Android devices. (Pixel, pixel 2)
-            // https://forum.unity.com/threads/android-webcamtexture-in-low-light-only-some-models.520656/
-            // https://forum.unity.com/threads/released-opencv-for-unity.277080/page-33#post-3445178
-            rearCameraRequestedFPS = webCamTextureToMatHelper.requestedFPS;
-            if (webCamTextureToMatHelper.requestedIsFrontFacing) {                
-                webCamTextureToMatHelper.requestedFPS = 15;
-                webCamTextureToMatHelper.Initialize ();
-            } else {
-                webCamTextureToMatHelper.Initialize ();
-            }
-#else
+            webCamTextureToMatHelper = gameObject.GetComponent<HololensCameraStreamToMatHelper>();
+        #if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
+            webCamTextureToMatHelper.frameMatAcquired += OnFrameMatAcquired;
+        #endif
             webCamTextureToMatHelper.Initialize();
-#endif
 
-            tracker_type = TrackerType.KCF;
+            //tracker_type = TrackerType.KCF;
 
-
+            /*
             if (tracker_type == TrackerType.Boosting)
                 monotracker = TrackerBoosting.create();
             if (tracker_type == TrackerType.MIL)
@@ -115,10 +111,7 @@ namespace OpenCVForUnityExample
             if (tracker_type == TrackerType.MedianFlow)
                 monotracker = TrackerMedianFlow.create();
             if (tracker_type == TrackerType.CSRT)
-                monotracker = TrackerCSRT.create();
-
-
-
+                monotracker = TrackerCSRT.create();*/
         }
 
         /// <summary>
@@ -130,47 +123,79 @@ namespace OpenCVForUnityExample
 
             Mat webCamTextureMat = webCamTextureToMatHelper.GetMat();
 
+
+#if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
+            // HololensCameraStream always returns image data in BGRA format.
+            texture = new Texture2D (webCamTextureMat.cols (), webCamTextureMat.rows (), TextureFormat.BGRA32, false);
+#else
             texture = new Texture2D(webCamTextureMat.cols(), webCamTextureMat.rows(), TextureFormat.RGBA32, false);
+#endif
 
-            gameObject.GetComponent<Renderer>().material.mainTexture = texture;
-
-            gameObject.transform.localScale = new Vector3(webCamTextureMat.cols(), webCamTextureMat.rows(), 1);
+            texture.wrapMode = TextureWrapMode.Clamp;
 
             Debug.Log("Screen.width " + Screen.width + " Screen.height " + Screen.height + " Screen.orientation " + Screen.orientation);
 
-            if (fpsMonitor != null)
-            {
-                fpsMonitor.Add("width", webCamTextureMat.width().ToString());
-                fpsMonitor.Add("height", webCamTextureMat.height().ToString());
-                fpsMonitor.Add("orientation", Screen.orientation.ToString());
-            }
+
+            processingAreaRect = new OpenCVForUnity.Rect((int)(webCamTextureMat.cols() * (outsideClippingRatio.x - clippingOffset.x)), (int)(webCamTextureMat.rows() * (outsideClippingRatio.y + clippingOffset.y)),
+                (int)(webCamTextureMat.cols() * (1f - outsideClippingRatio.x * 2)), (int)(webCamTextureMat.rows() * (1f - outsideClippingRatio.y * 2)));
+            processingAreaRect = processingAreaRect.intersect(new OpenCVForUnity.Rect(0, 0, webCamTextureMat.cols(), webCamTextureMat.rows()));
 
 
-            float width = webCamTextureMat.width();
-            float height = webCamTextureMat.height();
+            grayMat = new Mat(webCamTextureMat.rows(), webCamTextureMat.cols(), CvType.CV_8UC1);
 
-            float widthScale = (float)Screen.width / width;
-            float heightScale = (float)Screen.height / height;
-            if (widthScale < heightScale)
-            {
-                Camera.main.orthographicSize = (width * (float)Screen.height / (float)Screen.width) / 2;
-            }
-            else
-            {
-                Camera.main.orthographicSize = height / 2;
-            }
+            //
 
-            monotracker = TrackerKCF.create(); //8n
+            //HL
+            quad_renderer = gameObject.GetComponent<Renderer>() as Renderer;
+            quad_renderer.sharedMaterial.SetTexture("_MainTex", texture);
+            quad_renderer.sharedMaterial.SetVector("_VignetteOffset", new Vector4(clippingOffset.x, clippingOffset.y));
+
+            Matrix4x4 projectionMatrix;
+#if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
+            projectionMatrix = webCamTextureToMatHelper.GetProjectionMatrix ();
+            quad_renderer.sharedMaterial.SetMatrix ("_CameraProjectionMatrix", projectionMatrix);
+#else
+
+            //HL
+            //This value is obtained from PhotoCapture's TryGetProjectionMatrix() method.I do not know whether this method is good.
+            //Please see the discussion of this thread.Https://forums.hololens.com/discussion/782/live-stream-of-locatable-camera-webcam-in-unity
+            projectionMatrix = Matrix4x4.identity;
+            projectionMatrix.m00 = 2.31029f;
+            projectionMatrix.m01 = 0.00000f;
+            projectionMatrix.m02 = 0.09614f;
+            projectionMatrix.m03 = 0.00000f;
+            projectionMatrix.m10 = 0.00000f;
+            projectionMatrix.m11 = 4.10427f;
+            projectionMatrix.m12 = -0.06231f;
+            projectionMatrix.m13 = 0.00000f;
+            projectionMatrix.m20 = 0.00000f;
+            projectionMatrix.m21 = 0.00000f;
+            projectionMatrix.m22 = -1.00000f;
+            projectionMatrix.m23 = 0.00000f;
+            projectionMatrix.m30 = 0.00000f;
+            projectionMatrix.m31 = 0.00000f;
+            projectionMatrix.m32 = -1.00000f;
+            projectionMatrix.m33 = 0.00000f;
+            quad_renderer.sharedMaterial.SetMatrix("_CameraProjectionMatrix", projectionMatrix);
+#endif
+
+            quad_renderer.sharedMaterial.SetFloat("_VignetteScale", vignetteScale);
+
+
+            float halfOfVerticalFov = Mathf.Atan(1.0f / projectionMatrix.m11);
+            float aspectRatio = (1.0f / Mathf.Tan(halfOfVerticalFov)) / projectionMatrix.m00;
+            Debug.Log("halfOfVerticalFov " + halfOfVerticalFov);
+            Debug.Log("aspectRatio " + aspectRatio);
+
+            //13n
+            monotracker = TrackerKCF.create();
             bbox = new Rect2d();
             selectedPointList = new List<Point>();
 
-            grayMat = new Mat(webCamTextureMat.rows(), webCamTextureMat.cols(), CvType.CV_8UC1);
+            
+            
+            SetupGestureRecognizer();
         }
-
-
-
-
-
 
         /// <summary>
         /// Raises the web cam texture to mat helper disposed event.
@@ -178,64 +203,55 @@ namespace OpenCVForUnityExample
         public void OnWebCamTextureToMatHelperDisposed()
         {
             Debug.Log("OnWebCamTextureToMatHelperDisposed");
-            //ToCheck
+
             if (grayMat != null)
                 grayMat.Dispose();
 
-            if (texture != null)
-            {
-                Texture2D.Destroy(texture);
-                texture = null;
-            }
-        }
 
-       
+            //bgMat.Dispose ();
+            //dstMat.Dispose ();
+            //dstMatClippingROI.Dispose ();
+
+            grayPixels = null;
+            maskPixels = null;
+        }
 
         /// <summary>
         /// Raises the web cam texture to mat helper error occurred event.
         /// </summary>
         /// <param name="errorCode">Error code.</param>
-        public void OnWebCamTextureToMatHelperErrorOccurred(/*WebCamTextureToMatHelper.ErrorCode errorCode*/)
+        public void OnWebCamTextureToMatHelperErrorOccurred(WebCamTextureToMatHelper.ErrorCode errorCode)
         {
-            Debug.Log("OnWebCamTextureToMatHelperErrorOccurred "/* correcto to see which error is + errorCode*/);
+            Debug.Log("OnWebCamTextureToMatHelperErrorOccurred " + errorCode);
         }
 
-
-        // Update is called once per frame
-        void Update()
+        //alo? cual si se corre?
+        //OnFrameMatAcquired == update pero para el HL?
+        /*ToDo en Hololens 13n*/
+#if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
+        public void OnFrameMatAcquired (Mat bgraMat, Matrix4x4 projectionMatrix, Matrix4x4 cameraToWorldMatrix)
         {
+            Mat rgbaMat = webCamTextureToMatHelper.GetMat();
 
+            Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
 
-            /// Mouse interaction, not developed yet
-#if ((UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR)
-            //Touch
-            int touchCount = Input.touchCount;
-            if (touchCount == 1)
-            {
-                Touch t = Input.GetTouch(0);
-                if(t.phase == TouchPhase.Ended && !EventSystem.current.IsPointerOverGameObject(t.fingerId)){
-                    storedTouchPoint = new Point (t.position.x, t.position.y);
-                    //Debug.Log ("touch X " + t.position.x);
-                    //Debug.Log ("touch Y " + t.position.y);
-                }
-            }
-#else
-            //Mouse
-            if (Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject())
+           // textMesh.text = selectedPointList.Count+"";
+             textMesh.text = "onFrameAquired";
+
+            //eso toca cambiarlo14n
+            /*if (Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject())
             {
                 storedTouchPoint = new Point(Input.mousePosition.x, Input.mousePosition.y);
                 //Debug.Log ("mouse X " + Input.mousePosition.x);
                 //Debug.Log ("mouse Y " + Input.mousePosition.y);
-            }
-#endif
+            }*/
+            Debug.Log("YEEEEEEEI Entró al frame update por el HL");
+            //textMesh.text = ":D";
 
 
+            //14N PM DEL HL A ver si sirve
             if (webCamTextureToMatHelper.IsPlaying() && webCamTextureToMatHelper.DidUpdateThisFrame())
             {
-                //Debug.Log("ya esta mostrando la camara");// si, si lo crea cuando ya ve algo la webcam
-
-                Mat rgbaMat = webCamTextureToMatHelper.GetMat();
-                Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
 
                 //Here starts the OpenCV script 
 
@@ -246,7 +262,7 @@ namespace OpenCVForUnityExample
                     {
                         ConvertScreenPointToTexturePoint(storedTouchPoint, storedTouchPoint, gameObject, rgbaMat.cols(), rgbaMat.rows());
 
-                        OnTouch(rgbaMat, storedTouchPoint); //rgab o gray¡
+                        // OnTouch(rgbaMat, storedTouchPoint); //rgab o gray¡
                         Debug.Log("primer clic por " + storedTouchPoint.x + ";" + storedTouchPoint.y);
                         storedTouchPoint = null;
                     }
@@ -255,13 +271,11 @@ namespace OpenCVForUnityExample
                 //error PlayerLoop called recursively! on iOS.reccomend WebCamTexture.
                 if (selectedPointList.Count != 1)
                 {
-
-
                     //onTouch para el 2do clic
                     if (storedTouchPoint != null)
                     {
                         ConvertScreenPointToTexturePoint(storedTouchPoint, storedTouchPoint, gameObject, rgbaMat.cols(), rgbaMat.rows());
-                        OnTouch(rgbaMat, storedTouchPoint);
+                        //OnTouch(rgbaMat, storedTouchPoint);
                         storedTouchPoint = null;
                     }
 
@@ -284,7 +298,6 @@ namespace OpenCVForUnityExample
                             monotracker = TrackerKCF.create(); //8n
                             monotracker.init(grayMat, new Rect2d(region.x, region.y, region.width, region.height));
                         }
-
                         selectedPointList.Clear(); //comentela pa que no resetee el init
                                                    //8n trackingColorList.Add (new Scalar (UnityEngine.Random.Range (0, 255), UnityEngine.Random.Range (0, 255), UnityEngine.Random.Range (0, 255))); //le pone color
                     }
@@ -296,14 +309,132 @@ namespace OpenCVForUnityExample
                     bool updated = monotracker.update(grayMat, bbox);//8n //pero nunca le pasa la bbox ni las coordenadas, unicamente al momento de tracker.init
                     if (updated)
                     {
-                        //Debug.Log("tracking por aca:" + bbox.x + ";" + bbox.y);
+                        Debug.Log("tracking por aca:" + bbox.x + ";" + bbox.y);
                         Imgproc.rectangle(rgbaMat, bbox.tl(), bbox.br(), new Scalar(255, 255, 255, 255), 2, 1, 0); //8n
                     }
                     else
                     {
                         //Debug.Log("Se perdio en:" + bbox.x + ";" + bbox.y);
                         Imgproc.rectangle(rgbaMat, previousBox.tl(), previousBox.br(), new Scalar(255, 0, 0, 255), 2, 1, 0); //8n
+                    }
+         
 
+                }
+            }
+
+            //new HL
+            UnityEngine.WSA.Application.InvokeOnAppThread(() => {
+
+            if (!webCamTextureToMatHelper.IsPlaying ()) return;
+
+            Utils.fastMatToTexture2D(bgraMat, texture);
+            bgraMat.Dispose ();
+
+            Matrix4x4 worldToCameraMatrix = cameraToWorldMatrix.inverse;
+
+            quad_renderer.sharedMaterial.SetMatrix ("_WorldToCameraMatrix", worldToCameraMatrix);
+
+            // Position the canvas object slightly in front
+            // of the real world web camera.
+            Vector3 position = cameraToWorldMatrix.GetColumn (3) - cameraToWorldMatrix.GetColumn (2);
+            position *= 1.2f;
+
+            // Rotate the canvas object so that it faces the user.
+            Quaternion rotation = Quaternion.LookRotation (-cameraToWorldMatrix.GetColumn (2), cameraToWorldMatrix.GetColumn (1));
+
+            gameObject.transform.position = position;
+            gameObject.transform.rotation = rotation;
+
+            }, false);
+        }
+
+#else
+
+        // Update is called once per frame, in webcam
+        void Update()
+        {
+
+            if (webCamTextureToMatHelper.IsPlaying() && webCamTextureToMatHelper.DidUpdateThisFrame())
+            {
+
+                Mat rgbaMat = webCamTextureToMatHelper.GetMat();
+
+                Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
+
+                //textMesh.text = selectedPointList.Count+"";
+
+                //version con el mouse
+                if (Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject())
+                {
+                    storedTouchPoint = new Point(Input.mousePosition.x, Input.mousePosition.y);
+                    Debug.Log ("mouse X " + Input.mousePosition.x);
+                    Debug.Log ("mouse Y " + Input.mousePosition.y);
+                }
+                Debug.Log("Entró al update");
+
+                //Here starts the OpenCV script 
+
+                //onTouch para el 1er clic
+                if (selectedPointList.Count == 1)
+                {
+                    if (storedTouchPoint != null)
+                    {
+                        ConvertScreenPointToTexturePoint(storedTouchPoint, storedTouchPoint, gameObject, rgbaMat.cols(), rgbaMat.rows());
+
+                        // OnTouch(rgbaMat, storedTouchPoint); //rgab o gray¡
+                        Debug.Log("primer clic por " + storedTouchPoint.x + ";" + storedTouchPoint.y);
+                        
+                        storedTouchPoint = null;
+                    }
+                }
+
+                //error PlayerLoop called recursively! on iOS.reccomend WebCamTexture.
+                if (selectedPointList.Count != 1)
+                {
+                    //onTouch para el 2do clic
+                    if (storedTouchPoint != null)
+                    {
+                        ConvertScreenPointToTexturePoint(storedTouchPoint, storedTouchPoint, gameObject, rgbaMat.cols(), rgbaMat.rows());
+                        //OnTouch(rgbaMat, storedTouchPoint);
+                        storedTouchPoint = null;
+                    }
+
+                    //si ya es 2, creeme otra trackinArea
+                    if (selectedPointList.Count < 2)
+                    {
+                        foreach (var point in selectedPointList)
+                        {
+                            Imgproc.circle(rgbaMat, point, 6, new Scalar(0, 0, 255), 2);
+                        }
+                    }
+                    else
+                    {
+                        //key line! DM
+                        using (MatOfPoint selectedPointMat = new MatOfPoint(selectedPointList.ToArray()))
+                        {
+                            OpenCVForUnity.Rect region = Imgproc.boundingRect(selectedPointMat); //si se necesita al fin y al cabo
+
+                            SelectTracker(tracker_type);   //16n monotracker = TrackerKCF.create(); //8n
+                            monotracker.init(grayMat, new Rect2d(region.x, region.y, region.width, region.height));
+                        }
+                        selectedPointList.Clear(); //comentela pa que no resetee el init
+                                                    //8n trackingColorList.Add (new Scalar (UnityEngine.Random.Range (0, 255), UnityEngine.Random.Range (0, 255), UnityEngine.Random.Range (0, 255))); //le pone color
+                    }
+
+
+                    // aca ya no lo inicializa, update los antesriores
+                    //trackers.update (rgbaMat, objects);
+                    Rect2d previousBox = bbox;
+                    bool updated = monotracker.update(grayMat, bbox);//8n //pero nunca le pasa la bbox ni las coordenadas, unicamente al momento de tracker.init
+                    if (updated)
+                    {
+                        Debug.Log("tracking por aca:" + bbox.x + ";" + bbox.y);
+                        Imgproc.rectangle(rgbaMat, bbox.tl(), bbox.br(), new Scalar(255, 255, 255, 255), 2, 1, 0); //8n
+                    }
+                    else
+                    {
+                        //Debug.Log("Se perdio en:" + bbox.x + ";" + bbox.y);
+                        Imgproc.rectangle(rgbaMat, previousBox.tl(), previousBox.br(), new Scalar(255, 0, 0, 255), 2, 1, 0); //8n
                     }
                     //                bool updated = trackers.update (rgbaMat, objects);
                     //                Debug.Log ("updated " + updated);
@@ -311,42 +442,175 @@ namespace OpenCVForUnityExample
                     //                    OnResetTrackerButtonClick ();
                     //                }
 
-                    /*8n Rect2d[] objectsArray = objects.toArray ();
-                    for (int i = 0; i < objectsArray.Length; i++) {
-                        Imgproc.rectangle (rgbaMat, objectsArray [i].tl (), objectsArray [i].br (), trackingColorList [i], 2, 1, 0);
-                    }*/
+                }
+
+            Utils.fastMatToTexture2D(rgbaMat, texture);
+            }
+
+            if (webCamTextureToMatHelper.IsPlaying())
+            {
+
+                Matrix4x4 cameraToWorldMatrix = webCamTextureToMatHelper.GetCameraToWorldMatrix();
+                Matrix4x4 worldToCameraMatrix = cameraToWorldMatrix.inverse;
+
+                quad_renderer.sharedMaterial.SetMatrix("_WorldToCameraMatrix", worldToCameraMatrix);
+
+                // Position the canvas object slightly in front
+                // of the real world web camera.
+                Vector3 position = cameraToWorldMatrix.GetColumn(3) - cameraToWorldMatrix.GetColumn(2);
+                position *= 1.2f;
+
+                // Rotate the canvas object so that it faces the user.
+                Quaternion rotation = Quaternion.LookRotation(-cameraToWorldMatrix.GetColumn(2), cameraToWorldMatrix.GetColumn(1));
+
+                gameObject.transform.position = position;
+                gameObject.transform.rotation = rotation;
+            }
 
 
+            /*
+            // 14n pm pa q aquired corriera
+            if (Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                storedTouchPoint = new Point(Input.mousePosition.x, Input.mousePosition.y);
+                //Debug.Log ("mouse X " + Input.mousePosition.x);
+                //Debug.Log ("mouse Y " + Input.mousePosition.y);
+            }
+
+            if (webCamTextureToMatHelper.IsPlaying() && webCamTextureToMatHelper.DidUpdateThisFrame())
+            {
+
+                Mat rgbaMat = webCamTextureToMatHelper.GetMat();
+
+                Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
 
 
-                    if (selectedPointList.Count != 1)
-                    {
-                        //Imgproc.putText (rgbaMat, "Please touch the screen, and select tracking regions.", new Point (5, rgbaMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar (255, 255, 255, 255), 2, Imgproc.LINE_AA, false);
-                        if (fpsMonitor != null)
-                        {
-                            fpsMonitor.consoleText = "Touch the screen to select a new tracking region.";
-                        }
-                    }
-                    else
-                    {
-                        //Imgproc.putText (rgbaMat, "Please select the end point of the new tracking region.", new Point (5, rgbaMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar (255, 255, 255, 255), 2, Imgproc.LINE_AA, false);
-                        if (fpsMonitor != null)
-                        {
-                            fpsMonitor.consoleText = "Please select the end point of the new tracking region.";
-                        }
-                    }
+                //Here starts the OpenCV script 
 
+                //onTouch para el 1er clic
+                if (selectedPointList.Count == 1)
+            {
+                textMesh.text = selectedPointList.Count + "";
 
-                    Utils.matToTexture2D(rgbaMat, texture, webCamTextureToMatHelper.GetBufferColors());
+                if (storedTouchPoint != null)
+                {
+                    ConvertScreenPointToTexturePoint(storedTouchPoint, storedTouchPoint, gameObject, rgbaMat.cols(), rgbaMat.rows());
 
+                    OnTouch(rgbaMat, storedTouchPoint); //rgab o gray¡
+                    Debug.Log("primer clic por " + storedTouchPoint.x + ";" + storedTouchPoint.y);
+                    storedTouchPoint = null;
 
-                    //Imgproc.putText (rgbaMat, "W:" + rgbaMat.width () + " H:" + rgbaMat.height () + " SO:" + Screen.orientation, new Point (5, rgbaMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar (255, 255, 255, 255), 2, Imgproc.LINE_AA, false);
-
-
-                    //
                 }
             }
+
+            //error PlayerLoop called recursively! on iOS.reccomend WebCamTexture.
+            if (selectedPointList.Count != 1)
+            {
+                //onTouch para el 2do clic
+                if (storedTouchPoint != null)
+                {
+                    ConvertScreenPointToTexturePoint(storedTouchPoint, storedTouchPoint, gameObject, rgbaMat.cols(), rgbaMat.rows());
+                    OnTouch(rgbaMat, storedTouchPoint);
+                    storedTouchPoint = null;
+                }
+
+                //si ya es 2, cree otra trackinArea
+                if (selectedPointList.Count < 2)
+                {
+                    foreach (var point in selectedPointList)
+                    {
+                        Imgproc.circle(rgbaMat, point, 6, new Scalar(0, 0, 255), 2);
+                    }
+                }
+                else
+                {
+                    //key line! DM
+                    using (MatOfPoint selectedPointMat = new MatOfPoint(selectedPointList.ToArray()))
+                    {
+                        OpenCVForUnity.Rect region = Imgproc.boundingRect(selectedPointMat); //si se necesita al fin y al cabo
+                                                                                             //8n multitracker trackers.add (TrackerKCF.create (), rgbaMat, new Rect2d (region.x, region.y, region.width, region.height)); //tocomment soon
+
+                        monotracker = TrackerKCF.create(); //8n
+                        monotracker.init(grayMat, new Rect2d(region.x, region.y, region.width, region.height));
+                        textMesh.text = selectedPointList.Count + "track";
+
+                    }
+
+                    selectedPointList.Clear(); //comentela pa que no resetee el init
+                }
+
+
+                // aca ya no lo inicializa, update los antesriores
+                //trackers.update (rgbaMat, objects);
+                Rect2d previousBox = bbox;
+                bool updated = monotracker.update(grayMat, bbox);//8n //pero nunca le pasa la bbox ni las coordenadas, unicamente al momento de tracker.init
+                if (updated)
+                {
+                    //Debug.Log("tracking por aca:" + bbox.x + ";" + bbox.y);
+                    Imgproc.rectangle(rgbaMat, bbox.tl(), bbox.br(), new Scalar(255, 255, 255, 255), 2, 1, 0); //8n
+                }
+                else
+                {
+                    //Debug.Log("Se perdio en:" + bbox.x + ";" + bbox.y);
+                    Imgproc.rectangle(rgbaMat, previousBox.tl(), previousBox.br(), new Scalar(255, 0, 0, 255), 2, 1, 0); //8n
+
+                }
+                //                bool updated = trackers.update (rgbaMat, objects);
+                //                Debug.Log ("updated " + updated);
+                //                if (!updated && objects.rows () > 0) {
+                //                    OnResetTrackerButtonClick ();
+                //                }
+
+
+                // commented by me 13n
+                //if (selectedPointList.Count != 1)
+                //{
+                //    //Imgproc.putText (rgbaMat, "Please touch the screen, and select tracking regions.", new Point (5, rgbaMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar (255, 255, 255, 255), 2, Imgproc.LINE_AA, false);
+                //    if (fpsMonitor != null)
+                //    {
+                //        fpsMonitor.consoleText = "Touch the screen to select a new tracking region.";
+                //    }
+                //}
+                //else
+                //{
+                //    //Imgproc.putText (rgbaMat, "Please select the end point of the new tracking region.", new Point (5, rgbaMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar (255, 255, 255, 255), 2, Imgproc.LINE_AA, false);
+                //    if (fpsMonitor != null)
+                //    {
+                //        fpsMonitor.consoleText = "Please select the end point of the new tracking region.";
+                //    }
+                //}
+
+                //
+
+                Utils.fastMatToTexture2D(rgbaMat, texture);
+
+                // rgbaMatClipROI.Dispose ();
+            }
         }
+
+
+            if (webCamTextureToMatHelper.IsPlaying())
+            {
+
+                Matrix4x4 cameraToWorldMatrix = webCamTextureToMatHelper.GetCameraToWorldMatrix();
+                Matrix4x4 worldToCameraMatrix = cameraToWorldMatrix.inverse;
+
+                quad_renderer.sharedMaterial.SetMatrix("_WorldToCameraMatrix", worldToCameraMatrix);
+
+                // Position the canvas object slightly in front
+                // of the real world web camera.
+                Vector3 position = cameraToWorldMatrix.GetColumn(3) - cameraToWorldMatrix.GetColumn(2);
+                position *= 1.2f;
+
+                // Rotate the canvas object so that it faces the user.
+                Quaternion rotation = Quaternion.LookRotation(-cameraToWorldMatrix.GetColumn(2), cameraToWorldMatrix.GetColumn(1));
+
+                gameObject.transform.position = position;
+                gameObject.transform.rotation = rotation;
+            }*/
+        }
+
+#endif
 
 
         private void OnTouch(Mat img, Point touchPoint)
@@ -417,16 +681,14 @@ namespace OpenCVForUnityExample
         }
 
 
-        /**
-        ******  Buttons 
-        **/
-
-
         /// <summary>
         /// Raises the destroy event.
         /// </summary>
         void OnDestroy()
         {
+#if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
+            webCamTextureToMatHelper.frameMatAcquired -= OnFrameMatAcquired;
+#endif
             webCamTextureToMatHelper.Dispose();
         }
 
@@ -435,11 +697,7 @@ namespace OpenCVForUnityExample
         /// </summary>
         public void OnBackButtonClick()
         {
-#if UNITY_5_3 || UNITY_5_3_OR_NEWER
-            SceneManager.LoadScene("OpenCVForUnityExample");
-#else
-            Application.LoadLevel ("OpenCVForUnityExample");
-#endif
+            LoadScene("HoloLensWithOpenCVForUnityExample");
         }
 
         /// <summary>
@@ -471,21 +729,81 @@ namespace OpenCVForUnityExample
         /// </summary>
         public void OnChangeCameraButtonClick()
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
-            if (!webCamTextureToMatHelper.IsFrontFacing ()) {
-                rearCameraRequestedFPS = webCamTextureToMatHelper.requestedFPS;
-                webCamTextureToMatHelper.Initialize (!webCamTextureToMatHelper.IsFrontFacing (), 15, webCamTextureToMatHelper.rotate90Degree);
-            } else {                
-                webCamTextureToMatHelper.Initialize (!webCamTextureToMatHelper.IsFrontFacing (), rearCameraRequestedFPS, webCamTextureToMatHelper.rotate90Degree);
-            }
-#else
-            webCamTextureToMatHelper.requestedIsFrontFacing = !webCamTextureToMatHelper.IsFrontFacing();
-#endif
+            webCamTextureToMatHelper.Initialize(null, webCamTextureToMatHelper.requestedWidth, webCamTextureToMatHelper.requestedHeight, !webCamTextureToMatHelper.requestedIsFrontFacing);
         }
+
+        //Tap Events
+
+
+
+        void SetupGestureRecognizer()
+        {
+            m_GestureRecognizer = new GestureRecognizer();
+            m_GestureRecognizer.SetRecognizableGestures(GestureSettings.Tap);
+#if UNITY_2017_2_OR_NEWER
+            m_GestureRecognizer.Tapped += OnTappedEvent;
+#else
+            m_GestureRecognizer.TappedEvent += OnTappedEvent;
+#endif
+            m_GestureRecognizer.StartCapturingGestures();
+
+            //m_CapturingPhoto = false;
+        }
+
+#if UNITY_2017_2_OR_NEWER
+        void OnTappedEvent(TappedEventArgs args)
+#else
+        void OnTappedEvent (InteractionSourceKind source, int tapCount, Ray headRay)
+#endif
+        {
+            // Determine if a Gaze pointer is over a GUI.
+            if (GazeManager.Instance.HitObject != null && GazeManager.Instance.HitObject.transform.name == "Text")
+            {
+                return;
+            }
+
+            storedTouchPoint = new Point(  GazeManager.Instance.HitPosition.x, GazeManager.Instance.HitPosition.y);
+            textMesh.text = storedTouchPoint.x + ";" + storedTouchPoint.y;
+
+            if (selectedPointList.Count < 2)
+            {
+                selectedPointList.Add(storedTouchPoint);
+                /*if (!(new OpenCVForUnity.Rect(0, 0, img.cols(), img.rows()).contains(selectedPointList[selectedPointList.Count - 1])))
+                {
+                    selectedPointList.RemoveAt(selectedPointList.Count - 1);
+                }*/
+            }
+
+
+            Debug.Log(selectedPointList.Count/*"Le dii"*//*"pos pegada"+GazeManager.Instance.HitPosition.x +";"+ GazeManager.Instance.HitPosition.y*/);
+            //15n textMesh.text = selectedPointList.Count+1 + "";
+
+        }
+
+        public void SelectTracker(TrackerType tracker_type)
+        {
+            if (tracker_type == TrackerType.Boosting)
+                monotracker = TrackerBoosting.create();
+            if (tracker_type == TrackerType.MIL)
+                monotracker = TrackerMIL.create();
+            if (tracker_type == TrackerType.KCF)
+                monotracker = TrackerKCF.create();
+            if (tracker_type == TrackerType.TLD)
+                monotracker = TrackerTLD.create();
+            if (tracker_type == TrackerType.MedianFlow)
+                monotracker = TrackerMedianFlow.create();
+            if (tracker_type == TrackerType.CSRT)
+                monotracker = TrackerCSRT.create();
+            if (tracker_type == TrackerType.MOSSE)
+                monotracker = TrackerMOSSE.create();
+        }
+
     }
+
 
     public enum TrackerType
     {
         Boosting = 1, MIL = 2, KCF = 3, TLD = 4, MedianFlow = 5, CSRT = 6, GOTURN = 7, MOSSE = 8
     }
 }
+
