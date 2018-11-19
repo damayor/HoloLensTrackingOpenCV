@@ -146,7 +146,7 @@ namespace HoloLensWithOpenCVForUnityExample
 
             m_CanvasRenderer.enabled = false;
             m_CapturingPhoto = true;
-            Debug.Log ("Taking picture...");
+            Debug.Log ("Taking picture...WIIIII ES ACA!!");
             m_PhotoCaptureObj.TakePhotoAsync (OnPhotoCaptured);
         }
 

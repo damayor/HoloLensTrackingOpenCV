@@ -559,7 +559,7 @@ PlayerSettings:
   metroCertificateNotAfter: 8014df685c8bd501
   metroApplicationDescription: HoloLensWithOpenCVForUnityExample
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: HoloLensWithOpenCVForUnityExample
   metroCommandLineArgsFile: 
   metroTileShowName: 0
   metroMediumTileShowName: 0

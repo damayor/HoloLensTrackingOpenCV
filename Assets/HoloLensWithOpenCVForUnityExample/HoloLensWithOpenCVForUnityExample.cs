@@ -56,5 +56,10 @@ namespace HoloLensWithOpenCVForUnityExample
         {
             LoadScene("HoloLensTrackerExample");
         }
+
+        public void OnHoloLensNormalCamExampleButtonClick()
+        {
+            LoadScene("HoloLensNormalCamExample");
+        }
     }
 }

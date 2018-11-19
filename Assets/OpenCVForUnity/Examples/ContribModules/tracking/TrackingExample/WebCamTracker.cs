@@ -54,6 +54,8 @@ namespace OpenCVForUnityExample
 
         Rect2d bbox;
 
+        Rect2d previousBox;
+
 
         /// <summary>
         /// The selected point list.
@@ -62,7 +64,8 @@ namespace OpenCVForUnityExample
 
         public TrackerType tracker_type;
 
-    
+        bool trackerInitialized;
+
 
 #if UNITY_ANDROID && !UNITY_EDITOR
                 float rearCameraRequestedFPS;
@@ -89,25 +92,8 @@ namespace OpenCVForUnityExample
 #else
             webCamTextureToMatHelper.Initialize();
 #endif
-
-            tracker_type = TrackerType.KCF;
-
-           
-            if (tracker_type == TrackerType.Boosting)
-                monotracker = TrackerBoosting.create();
-            if (tracker_type == TrackerType.MIL)
-                monotracker = TrackerMIL.create();
-            if (tracker_type == TrackerType.KCF)
-                monotracker = TrackerKCF.create();
-            if (tracker_type == TrackerType.TLD)
-                monotracker = TrackerTLD.create();
-            if (tracker_type == TrackerType.MedianFlow)
-                monotracker = TrackerMedianFlow.create();
-            if (tracker_type == TrackerType.CSRT)
-                monotracker = TrackerCSRT.create();
-
-
-
+            //SelectTracker(tracker_type);
+         
         }
 
         /// <summary>
@@ -151,15 +137,11 @@ namespace OpenCVForUnityExample
 
             monotracker = TrackerKCF.create(); //8n
             bbox = new Rect2d();
+            previousBox = new Rect2d();
             selectedPointList = new List<Point>();
 
             grayMat = new Mat(webCamTextureMat.rows(), webCamTextureMat.cols(), CvType.CV_8UC1);
         }
-
-
-
-
-
 
         /// <summary>
         /// Raises the web cam texture to mat helper disposed event.
@@ -218,7 +200,6 @@ namespace OpenCVForUnityExample
 
             if (webCamTextureToMatHelper.IsPlaying() && webCamTextureToMatHelper.DidUpdateThisFrame())
             {
-                //Debug.Log("ya esta mostrando la camara");// si, si lo crea cuando ya ve algo la webcam
 
                 Mat rgbaMat = webCamTextureToMatHelper.GetMat();
                 Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
@@ -264,45 +245,39 @@ namespace OpenCVForUnityExample
                         //key line! DM
                         using (MatOfPoint selectedPointMat = new MatOfPoint(selectedPointList.ToArray()))
                         {
-                            OpenCVForUnity.Rect region = Imgproc.boundingRect(selectedPointMat); //si se necesita al fin y al cabo
-                                                                                                 //8n multitracker trackers.add (TrackerKCF.create (), rgbaMat, new Rect2d (region.x, region.y, region.width, region.height)); //tocomment soon
+                            //TODO 13n cambiar essa region por varias regiones, que le pasara
+                            OpenCVForUnity.Rect region = Imgproc.boundingRect(selectedPointMat); //si se necesita al fin y al cabo                                                                   
 
-                            monotracker = TrackerKCF.create(); //8n
-                            monotracker.init(grayMat, new Rect2d(region.x, region.y, region.width, region.height));
+                            SelectTracker(tracker_type);   //16n monotracker = TrackerKCF.create(); //8n
+                            trackerInitialized = monotracker.init(grayMat, new Rect2d(region.x, region.y, region.width, region.height));
                         }
-
-                        selectedPointList.Clear(); //comentela pa que no resetee el init
-                                                   //8n trackingColorList.Add (new Scalar (UnityEngine.Random.Range (0, 255), UnityEngine.Random.Range (0, 255), UnityEngine.Random.Range (0, 255))); //le pone color
+                        selectedPointList.Clear(); 
                     }
 
 
-                    // aca ya no lo inicializa, update los antesriores
-                    //trackers.update (rgbaMat, objects);
-                    Rect2d previousBox = bbox;
-                    bool updated = monotracker.update(grayMat, bbox);//8n //pero nunca le pasa la bbox ni las coordenadas, unicamente al momento de tracker.init
-                    if (updated)
+                    // aca ya no lo inicializa, sino que lo actualiza
+                    if (trackerInitialized)
                     {
-                        //Debug.Log("tracking por aca:" + bbox.x + ";" + bbox.y);
-                        Imgproc.rectangle(rgbaMat, bbox.tl(), bbox.br(), new Scalar(255, 255, 255, 255), 2, 1, 0); //8n
+                        bool updated = monotracker.update(grayMat, bbox);//8n //pero nunca le pasa la bbox ni las coordenadas, unicamente al momento de tracker.init
+                        if (bbox.width != 0 && bbox.height != 0)
+                        {    
+                            Debug.Log("tracking por aca:" + bbox.x + ";" + bbox.y);
+                            Imgproc.rectangle(rgbaMat, bbox.tl(), bbox.br(), new Scalar(255, 255, 255, 255), 2, 1, 0);
+                            previousBox = new Rect2d(bbox.x, bbox.y, bbox.width, bbox.height);
+                        }
+                        else
+                        {
+                            Debug.Log("Se perdio en:" + previousBox.x + ";" + previousBox.y);
+                            Imgproc.rectangle(rgbaMat, previousBox.tl(), previousBox.br(), new Scalar(255, 0, 0, 255), 2, 1, 0); //8n
+
+
+                        }
                     }
-                    else
-                    {
-                        //Debug.Log("Se perdio en:" + bbox.x + ";" + bbox.y);
-                        Imgproc.rectangle(rgbaMat, previousBox.tl(), previousBox.br(), new Scalar(255, 0, 0, 255), 2, 1, 0); //8n
-
-                    }
-                    //                bool updated = trackers.update (rgbaMat, objects);
-                    //                Debug.Log ("updated " + updated);
-                    //                if (!updated && objects.rows () > 0) {
-                    //                    OnResetTrackerButtonClick ();
-                    //                }
-
-                    /*8n Rect2d[] objectsArray = objects.toArray ();
-                    for (int i = 0; i < objectsArray.Length; i++) {
-                        Imgproc.rectangle (rgbaMat, objectsArray [i].tl (), objectsArray [i].br (), trackingColorList [i], 2, 1, 0);
-                    }*/
-
-
+                    //     bool updated = trackers.update (rgbaMat, objects);
+                    //     Debug.Log ("updated " + updated);
+                    //     if (!updated && bbox.width > 0)
+                    //         OnResetTrackerButtonClick ();
+                    //     }
 
 
                     if (selectedPointList.Count != 1)
@@ -322,14 +297,10 @@ namespace OpenCVForUnityExample
                         }
                     }
 
-
                     Utils.matToTexture2D(rgbaMat, texture, webCamTextureToMatHelper.GetBufferColors());
-
 
                     //Imgproc.putText (rgbaMat, "W:" + rgbaMat.width () + " H:" + rgbaMat.height () + " SO:" + Screen.orientation, new Point (5, rgbaMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar (255, 255, 255, 255), 2, Imgproc.LINE_AA, false);
 
-
-                    //
                 }
             }
         }
@@ -469,6 +440,24 @@ namespace OpenCVForUnityExample
 #endif
         }
 
+
+        public void SelectTracker(TrackerType tracker_type)
+        {
+            if (tracker_type == TrackerType.Boosting)
+                monotracker = TrackerBoosting.create();
+            if (tracker_type == TrackerType.MIL)
+                monotracker = TrackerMIL.create();
+            if (tracker_type == TrackerType.KCF)
+                monotracker = TrackerKCF.create();
+            if (tracker_type == TrackerType.TLD)
+                monotracker = TrackerTLD.create();
+            if (tracker_type == TrackerType.MedianFlow)
+                monotracker = TrackerMedianFlow.create();
+            if (tracker_type == TrackerType.CSRT)
+                monotracker = TrackerCSRT.create();
+            if (tracker_type == TrackerType.MOSSE)
+                monotracker = TrackerMOSSE.create();
+        }
 
         public enum TrackerType
         {

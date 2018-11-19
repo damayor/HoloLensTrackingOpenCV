@@ -42,7 +42,7 @@ namespace OpenCVForUnityExample
         /// <summary>
         /// The trackers.
         /// </summary>
-        TrackerKCF monotracker;
+        Tracker monotracker;
 
         //8n
         Rect2d bbox;
@@ -72,10 +72,16 @@ namespace OpenCVForUnityExample
         /// </summary>
         FpsMonitor fpsMonitor;
 
-        #if UNITY_WEBGL && !UNITY_EDITOR
+        Rect2d previousBox;
+
+        public TrackerType tracker_type;
+
+        bool trackerInitialized;
+
+#if UNITY_WEBGL && !UNITY_EDITOR
         Stack<IEnumerator> coroutines = new Stack<IEnumerator> ();
-        #endif
-        
+#endif
+
         // Use this for initialization
         void Start ()
         {
@@ -93,9 +99,11 @@ namespace OpenCVForUnityExample
             coroutines.Push (getFilePath_Coroutine);
             StartCoroutine (getFilePath_Coroutine);
             #else
-            capture.open (Utils.getFilePath ("768x576_mjpeg.mjpeg"));
+            capture.open (Utils.getFilePath ("negroCerca.mp4"/*"768x576_mjpeg.mjpeg"*/));  //negroCerca.mp4
             Init ();
-            #endif
+#endif
+
+            
         }
 
         private void Init ()
@@ -207,11 +215,10 @@ namespace OpenCVForUnityExample
                 } else {
                     //key line! DM
                     using (MatOfPoint selectedPointMat = new MatOfPoint (selectedPointList.ToArray ())) {
-                        OpenCVForUnity.Rect region = Imgproc.boundingRect (selectedPointMat); //si se necesita al fin y al cabo
-                        //8n multitracker trackers.add (TrackerKCF.create (), rgbMat, new Rect2d (region.x, region.y, region.width, region.height)); //tocomment soon
-                        
-                        monotracker = TrackerKCF.create(); //8n
-                        monotracker.init(rgbMat, new Rect2d(region.x, region.y, region.width, region.height));
+                        OpenCVForUnity.Rect region = Imgproc.boundingRect (selectedPointMat); //si se necesita al fin y al cabo                                                                                              //8n multitracker trackers.add (TrackerKCF.create (), rgbMat, new Rect2d (region.x, region.y, region.width, region.height)); //tocomment soon
+
+                        SelectTracker(tracker_type);   //16n monotracker = TrackerKCF.create(); //8n
+                        trackerInitialized = monotracker.init(rgbMat, new Rect2d(region.x, region.y, region.width, region.height));
                     }
 
                     selectedPointList.Clear (); //comentela pa que no resetee el init
@@ -222,23 +229,46 @@ namespace OpenCVForUnityExample
                 // aca ya no lo inicializa, update los antesriores
                 //trackers.update (rgbMat, objects);
 
-                monotracker.update(rgbMat, bbox);//8n //pero nunca le pasa la bbox ni las coordenadas, unicamente al momento de tracker.init
-                Debug.Log("tracking por aca:" + bbox.x +";"+ bbox.y);
 
-//                bool updated = trackers.update (rgbMat, objects);
-//                Debug.Log ("updated " + updated);
-//                if (!updated && objects.rows () > 0) {
-//                    OnResetTrackerButtonClick ();
-//                }
+                if (trackerInitialized)
+                {
+                   //bbox aca esta en 0s
+                    bool updated = monotracker.update(rgbMat, bbox);//8n //pero nunca le pasa la bbox ni las coordenadas, unicamente al momento de tracker.init
+                    if (bbox.width != 0 && bbox.height != 0)
+                    {
+                        Debug.Log("tracking por aca:" + bbox.x + ";" + bbox.y);
+                        Imgproc.rectangle(rgbMat, bbox.tl(), bbox.br(), new Scalar(255, 255, 255, 255), 2, 1, 0);
+                        previousBox = new Rect2d(bbox.x, bbox.y, bbox.width, bbox.height);
+                    }
+                    else
+                    {
+                        Debug.Log("Se perdio en:" + previousBox.x + ";" + previousBox.y);
+                        Imgproc.rectangle(rgbMat, previousBox.tl(), previousBox.br(), new Scalar(255, 0, 0, 255), 2, 1, 0);
 
-                /*8n Rect2d[] objectsArray = objects.toArray ();
-                for (int i = 0; i < objectsArray.Length; i++) {
-                    Imgproc.rectangle (rgbMat, objectsArray [i].tl (), objectsArray [i].br (), trackingColorList [i], 2, 1, 0);
-                }*/
+
+                        /*
+                         * //16n intento de redimensionar la bbox // como hace CSRT
+                         * Rect2d resized = new Rect2d(previousBox.tl().x, previousBox.tl().y, previousBox.width * 0.75f, previousBox.height * 0.75f );
+                            Imgproc.rectangle( rgbMat, resized.tl(), resized.br(), new Scalar(255, 255, 0, 255), 2, 1, 0);
+                       */
+
+                    }
+                    //if (!updated /*&& bbox.width > 0*/)
+                    //{
+                    //    OnResetTrackerButtonClick();
+                    //    Debug.Log("creamos uno nuevo!!!!!!!!");
+                    //}
+                }
+                
+
+                //bool updated = trackers.update (rgbMat, objects);
+                //                Debug.Log ("updated " + updated);
+                //                if (!updated && objects.rows () > 0) {
+                //                    OnResetTrackerButtonClick ();
+                //                }
+
 
                 Imgproc.rectangle(rgbMat, bbox.tl(), bbox.br(), new Scalar(255, 255, 255), 2, 1, 0); //8n
-
-
 
                 if (selectedPointList.Count != 1) {
                     //Imgproc.putText (rgbMat, "Please touch the screen, and select tracking regions.", new Point (5, rgbMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar (255, 255, 255, 255), 2, Imgproc.LINE_AA, false);
@@ -371,10 +401,10 @@ namespace OpenCVForUnityExample
         /// edited 8n
         public void OnResetTrackerButtonClick ()
         {
-            if (trackers != null) {
-                trackers.Dispose ();
-                trackers = null;
-            }
+            //if (trackers != null) {
+            //    trackers.Dispose ();
+            //    trackers = null;
+            //}
 
             if (monotracker != null)
             {
@@ -382,12 +412,34 @@ namespace OpenCVForUnityExample
                 monotracker = null;
             }
 
-            
-
-            trackers = MultiTracker.create ();
-            monotracker = TrackerKCF.create();
-            trackingColorList.Clear ();
+            //trackers = MultiTracker.create ();
+            //SelectTracker(tracker_type);
+            //trackingColorList.Clear ();
             selectedPointList.Clear ();
+        }
+
+        public void SelectTracker(TrackerType tracker_type)
+        {
+            if (tracker_type == TrackerType.Boosting)
+                monotracker = TrackerBoosting.create();
+            if (tracker_type == TrackerType.MIL)
+                monotracker = TrackerMIL.create();
+            if (tracker_type == TrackerType.KCF)
+                monotracker = TrackerKCF.create();
+            if (tracker_type == TrackerType.TLD)
+                monotracker = TrackerTLD.create();
+            if (tracker_type == TrackerType.MedianFlow)
+                monotracker = TrackerMedianFlow.create();
+            if (tracker_type == TrackerType.CSRT)
+                monotracker = TrackerCSRT.create();
+            if (tracker_type == TrackerType.MOSSE)
+                monotracker = TrackerMOSSE.create();
+        }
+
+
+        public enum TrackerType
+        {
+            Boosting = 1, MIL = 2, KCF = 3, TLD = 4, MedianFlow = 5, CSRT = 6, GOTURN = 7, MOSSE = 8
         }
     }
 }
