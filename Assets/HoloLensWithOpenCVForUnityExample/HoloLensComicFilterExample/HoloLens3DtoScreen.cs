@@ -18,7 +18,7 @@ namespace HoloLensWithOpenCVForUnityExample
     /// Referring to http://dev.classmethod.jp/smartphone/opencv-manga-2/.
     /// </summary>
     [RequireComponent(typeof(HololensCameraStreamToMatHelper))]
-    public class HoloLensCamTracker : ExampleSceneBase
+    public class HoloLens3DtoScreen : ExampleSceneBase
     {
         /// <summary>
         /// The gray mat.
@@ -69,15 +69,7 @@ namespace HoloLensWithOpenCVForUnityExample
         /// </summary>
         List<Point> selectedPointList;
 
-        string[] tracker_types = { "BOOSTING", "MIL", "KCF", "TLD", "MEDIANFLOW", "GOTURN", "MOSSE", "CSRT" };
-
-        Tracker monotracker;
-
         Rect2d bbox;
-
-        Rect2d previousBox;
-
-        public TrackerType tracker_type ;
 
         //Tap Event
         GestureRecognizer m_GestureRecognizer;
@@ -87,11 +79,7 @@ namespace HoloLensWithOpenCVForUnityExample
         public TextMesh textMesh;
         public TextMesh textScreenGazePos;
 
-        bool trackerInitialized;
 
-        public float widthBox = 100f;
-
-  
 
         // Use this for initialization
         protected override void Start()
@@ -99,26 +87,11 @@ namespace HoloLensWithOpenCVForUnityExample
             base.Start();
 
             webCamTextureToMatHelper = gameObject.GetComponent<HololensCameraStreamToMatHelper>();
-        #if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
+#if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
             webCamTextureToMatHelper.frameMatAcquired += OnFrameMatAcquired;
-        #endif
+#endif
             webCamTextureToMatHelper.Initialize();
 
-            //tracker_type = TrackerType.KCF;
-
-            /*
-            if (tracker_type == TrackerType.Boosting)
-                monotracker = TrackerBoosting.create();
-            if (tracker_type == TrackerType.MIL)
-                monotracker = TrackerMIL.create();
-            if (tracker_type == TrackerType.KCF)
-                monotracker = TrackerKCF.create();
-            if (tracker_type == TrackerType.TLD)
-                monotracker = TrackerTLD.create();
-            if (tracker_type == TrackerType.MedianFlow)
-                monotracker = TrackerMedianFlow.create();
-            if (tracker_type == TrackerType.CSRT)
-                monotracker = TrackerCSRT.create();*/
         }
 
         /// <summary>
@@ -208,12 +181,11 @@ namespace HoloLensWithOpenCVForUnityExample
             Debug.Log("aspectRatio " + aspectRatio);
 
             //13n
-            monotracker = TrackerKCF.create();
             bbox = new Rect2d();
             selectedPointList = new List<Point>();
 
-            
-            
+
+
             SetupGestureRecognizer();
         }
 
@@ -264,97 +236,48 @@ namespace HoloLensWithOpenCVForUnityExample
             if (webCamTextureToMatHelper.IsPlaying() && webCamTextureToMatHelper.DidUpdateThisFrame())
             {
 
+                //19n
+                //Vector3 posWorld = GazeManager.Instance.HitPosition;
+                //textMesh.text = posWorld + "";
+                //Vector2 posWorld2Screen = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), posWorld /*not used because of gaze*/);
+                //textScreenGazePos.text = posWorld2Screen + "";
+
+
+
                 Mat rgbaMat = webCamTextureToMatHelper.GetMat();
 
                 Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
 
-                //19n
-                if (sphere != null)
-                {
-                    storedTouchPoint = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), sphere.transform.position);//19N
-                    textMesh.text = storedTouchPoint.x + ";" + storedTouchPoint.y;
-
-                }
-
-               //20n
-                if (storedTouchPoint != null)
-                {
-                    selectedPointList.Add(storedTouchPoint);
-
-                    Imgproc.circle(rgbaMat, storedTouchPoint, 6, new Scalar(0, 0, 255), 2);
-
-                    Point p2 = new Point ( storedTouchPoint.x + 100, storedTouchPoint.y + 100);
-                    selectedPointList.Add(p2);
-
-                    Imgproc.circle(rgbaMat, p2, 6, new Scalar(0, 255, 0), 2);
-
-                    //Imgproc.rectangle( rgbaMat, storedTouchPoint, new Point(storedTouchPoint.x + widthBox, storedTouchPoint.y + widthBox), new Scalar(255, 255, 255, 255), 2, 1, 0);
-
-                    using (MatOfPoint selectedPointMat = new MatOfPoint(selectedPointList.ToArray()))
-                    {
-                        OpenCVForUnity.Rect region = Imgproc.boundingRect(selectedPointMat); //si se necesita al fin y al cabo
-                        Debug.Log("region" + region);
-
-                        SelectTracker(tracker_type);   //16n monotracker = TrackerKCF.create(); //8n
-                        trackerInitialized = monotracker.init(grayMat, new Rect2d(region.x, region.y, region.width, region.height));
-                    }
-
-                    storedTouchPoint = null;
-
-                }
-
                 //textMesh.text = selectedPointList.Count+"";
-                
-                //version con el mouse
-                //if (Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject())
-                //{
-                //    storedTouchPoint = new Point(Input.mousePosition.x, Input.mousePosition.y);
-                //    Debug.Log ("mouse X " + Input.mousePosition.x);
-                //    Debug.Log ("mouse Y " + Input.mousePosition.y);
-                //}
+
+
 
                 //Here starts the OpenCV script 
-                
 
-                //error PlayerLoop called recursively! on iOS.reccomend WebCamTexture.
-               
-                    
-                //key line! DM
-                
-                    //selectedPointList.Clear(); //comentela pa que no resetee el init
-                                                //8n trackingColorList.Add (new Scalar (UnityEngine.Random.Range (0, 255), UnityEngine.Random.Range (0, 255), UnityEngine.Random.Range (0, 255))); //le pone color
-                    
+                Vector2 posWorld2Screen = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), sphere.transform.position);//19N
+
+                storedTouchPoint = new Point(posWorld2Screen.x, posWorld2Screen.y);
+                textMesh.text = storedTouchPoint.x + ";" + storedTouchPoint.y;
 
 
-                // aca ya no lo inicializa, update los antesriores
-                //trackers.update (rgbaMat, objects);
-                if (trackerInitialized)
+
+
+                //pintemelo en la screen
+                /*
+                if (selectedPointList.Count < 2)
                 {
-                    bool updated = monotracker.update(grayMat, bbox);//8n //pero nunca le pasa la bbox ni las coordenadas, unicamente al momento de tracker.init
-                    if (bbox.width != 0 && bbox.height != 0)
+                    foreach (var point in selectedPointList)
                     {
-                        //Debug.Log("tracking por aca:" + bbox.x + ";" + bbox.y);
-                        Imgproc.rectangle(rgbaMat, bbox.tl(), bbox.br(), new Scalar(255, 255, 255, 255), 2, 1, 0);
-                        previousBox = new Rect2d(bbox.x, bbox.y, bbox.width, bbox.height);
+                        Imgproc.circle(rgbaMat, point, 6, new Scalar(0, 0, 255), 2);
                     }
-                    else
-                    {
-                        Debug.Log("Se perdio en:" + previousBox.x + ";" + previousBox.y);
-                        Imgproc.rectangle(rgbaMat, previousBox.tl(), previousBox.br(), new Scalar(255, 0, 0, 255), 2, 1, 0); //8n
-
-
-                    }
-                }
-                    //                bool updated = trackers.update (rgbaMat, objects);
-                    //                Debug.Log ("updated " + updated);
-                    //                if (!updated && objects.rows () > 0) {
-                    //                    OnResetTrackerButtonClick ();
-                    //                }
-
-                
+                }*/
 
                 Utils.fastMatToTexture2D(rgbaMat, texture);
+
+
             }
+
+
 
             if (webCamTextureToMatHelper.IsPlaying())
             {
@@ -377,6 +300,7 @@ namespace HoloLensWithOpenCVForUnityExample
             }
 
 
+            
         }
 
 #endif
@@ -519,6 +443,50 @@ namespace HoloLensWithOpenCVForUnityExample
             //m_CapturingPhoto = false;
         }
 
+#if UNITY_2017_2_OR_NEWER
+        void OnTappedEvent(TappedEventArgs args)
+#else
+        void OnTappedEvent (InteractionSourceKind source, int tapCount, Ray headRay)
+#endif
+        {
+            // Determine if a Gaze pointer is over a GUI.
+            if (GazeManager.Instance.HitObject != null && GazeManager.Instance.HitObject.transform.name == "Text")
+            {
+                return;
+            }
+
+            if(sphere == null)
+            {
+                sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+            }
+
+            sphere.transform.position = GazeManager.Instance.HitPosition;
+
+
+            /*
+            Vector2 posWorld2Screen = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), sphere.transform.position);//19N
+
+            storedTouchPoint = new Point(posWorld2Screen.x, posWorld2Screen.y);
+            textMesh.text = storedTouchPoint.x + ";" + storedTouchPoint.y;*/
+
+            //Debug.Log(point3D +"punto en el espacio");
+
+
+            if (selectedPointList.Count < 2)
+            {
+                selectedPointList.Add(storedTouchPoint);
+                /*if (!(new OpenCVForUnity.Rect(0, 0, img.cols(), img.rows()).contains(selectedPointList[selectedPointList.Count - 1])))
+                {
+                    selectedPointList.RemoveAt(selectedPointList.Count - 1);
+                }*/
+            }
+
+
+            Debug.Log(selectedPointList.Count/*"Le dii"*//*"pos pegada"+GazeManager.Instance.HitPosition.x +";"+ GazeManager.Instance.HitPosition.y*/);
+            //15n textMesh.text = selectedPointList.Count+1 + "";
+
+        }
 
         /// <summary>
         /// Helper method for pixel projection into Unity3D world space.
@@ -556,7 +524,7 @@ namespace HoloLensWithOpenCVForUnityExample
          float2 ImagePosProjected = ImagePosUnnormalized.xy / ImagePosUnnormalized.w; // normalize by W, gives -1 to 1 space
          float2 ImagePosZeroToOne = (ImagePosProjected * 0.5) + float2(0.5, 0.5); // good for GPU textures
          int2 PixelPos = int2(ImagePosZeroToOne.x * ImageWidth, (1 - ImagePosZeroToOne.y) * ImageHeight); // good for CPU textures*/
-        public static Point WorldCoordsToScreen(Matrix4x4 cameraToWorldMatrix, Matrix4x4 projectionMatrix, /*HoloLensCameraStream.Resolution cameraResolution,*/ Vector3 worldSpacePos /*not used because of gaze*/)
+        public static Vector3 WorldCoordsToScreen(Matrix4x4 cameraToWorldMatrix, Matrix4x4 projectionMatrix, /*HoloLensCameraStream.Resolution cameraResolution,*/ Vector3 worldSpacePos /*not used because of gaze*/)
         {
 
             Matrix4x4 worldToCamera = Matrix4x4.Inverse(cameraToWorldMatrix);
@@ -564,84 +532,17 @@ namespace HoloLensWithOpenCVForUnityExample
             Debug.Log("cameraSpacePos, si las 2 primeras salen en 0, hice clic al frente");
 
             Vector4 ImagePosUnnormalized = projectionMatrix * new Vector4(cameraSpacePos.x, cameraSpacePos.y, cameraSpacePos.z, 1); // use 1 as the W component
-            Vector2 ImagePosProjected = new Vector2( ImagePosUnnormalized.x / ImagePosUnnormalized.w, ImagePosUnnormalized.y / ImagePosUnnormalized.w); // normalize by W, gives -1 to 1 space
+            Vector2 ImagePosProjected = new Vector2(ImagePosUnnormalized.x / ImagePosUnnormalized.w, ImagePosUnnormalized.y / ImagePosUnnormalized.w); // normalize by W, gives -1 to 1 space
             Vector2 ImagePosZeroToOne = (ImagePosProjected * 0.5f) + new Vector2(0.5f, 0.5f); // good for GPU textures
             Vector2 pixelPos = new Vector2(ImagePosZeroToOne.x * Screen.width, (1 - ImagePosZeroToOne.y) * Screen.height); // good for CPU textures
 
-            return new Point (pixelPos.x, pixelPos.y); 
+            return pixelPos;
         }
 
 
-        public void SelectTracker(TrackerType tracker_type)
-        {
-            if (tracker_type == TrackerType.Boosting)
-                monotracker = TrackerBoosting.create();
-            if (tracker_type == TrackerType.MIL)
-                monotracker = TrackerMIL.create();
-            if (tracker_type == TrackerType.KCF)
-                monotracker = TrackerKCF.create();
-            if (tracker_type == TrackerType.TLD)
-                monotracker = TrackerTLD.create();
-            if (tracker_type == TrackerType.MedianFlow)
-                monotracker = TrackerMedianFlow.create();
-            if (tracker_type == TrackerType.CSRT)
-                monotracker = TrackerCSRT.create();
-            if (tracker_type == TrackerType.MOSSE)
-                monotracker = TrackerMOSSE.create();
-        }
-
-
-#if UNITY_2017_2_OR_NEWER
-        void OnTappedEvent(TappedEventArgs args)
-#else
-        void OnTappedEvent (InteractionSourceKind source, int tapCount, Ray headRay)
-#endif
-        {
-
-            // Determine if a Gaze pointer is over a GUI.
-            if (GazeManager.Instance.HitObject != null && GazeManager.Instance.HitObject.transform.name == "Text")
-            {
-                return;
-            }
-
-            if (sphere == null)
-            {
-                sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-            }
-
-            sphere.transform.position = GazeManager.Instance.HitPosition;
-            storedTouchPoint = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), sphere.transform.position);//19N
-                                                                                                                                                                                 //    textMesh.text = storedTouchPoint.x + ";" + storedTouchPoint.y;
-            textMesh.text = storedTouchPoint.x + ";" + storedTouchPoint.y;
-
-
-            //Debug.Log(point3D +"punto en el espacio");
-
-            /*
-            if (selectedPointList.Count < 2)
-            {
-                selectedPointList.Add(storedTouchPoint);
-                /*if (!(new OpenCVForUnity.Rect(0, 0, img.cols(), img.rows()).contains(selectedPointList[selectedPointList.Count - 1])))
-                {
-                    selectedPointList.RemoveAt(selectedPointList.Count - 1);
-                }
-            }*/
-
-            //Debug.Log(selectedPointList.Count/*"Le dii"*//*"pos pegada"+GazeManager.Instance.HitPosition.x +";"+ GazeManager.Instance.HitPosition.y*/);
-            //15n textMesh.text = selectedPointList.Count+1 + "";
-
-        }
 
     }
+    
 
-
-    public enum TrackerType
-    {
-        Boosting = 1, MIL = 2, KCF = 3, TLD = 4, MedianFlow = 5, CSRT = 6, GOTURN = 7, MOSSE = 8
-    }
-
-
-   
 }
 

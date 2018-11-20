@@ -463,6 +463,46 @@ namespace OpenCVForUnityExample
         {
             Boosting = 1, MIL = 2, KCF = 3, TLD = 4, MedianFlow = 5, CSRT = 6, GOTURN = 7, MOSSE = 8
         }
+
+        
+#if UNITY_2017_2_OR_NEWER
+       // void OnTappedEvent(TappedEventArgs args)
+#else
+        void OnTappedEvent (InteractionSourceKind source, int tapCount, Ray headRay)
+
+        {
+            // Determine if a Gaze pointer is over a GUI.
+            if (GazeManager.Instance.HitObject != null && GazeManager.Instance.HitObject.transform.name == "Text")
+            {
+                return;
+            }
+
+            if (sphere == null)
+            {
+                sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+            }
+
+            sphere.transform.position = GazeManager.Instance.HitPosition;
+            storedTouchPoint = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), sphere.transform.position);//19N
+
+            //Debug.Log(point3D +"punto en el espacio");
+
+            /*
+            if (selectedPointList.Count < 2)
+            {
+                selectedPointList.Add(storedTouchPoint);
+                /*if (!(new OpenCVForUnity.Rect(0, 0, img.cols(), img.rows()).contains(selectedPointList[selectedPointList.Count - 1])))
+                {
+                    selectedPointList.RemoveAt(selectedPointList.Count - 1);
+                }
+            }*/
+
+            //Debug.Log(selectedPointList.Count/*"Le dii"*//*"pos pegada"+GazeManager.Instance.HitPosition.x +";"+ GazeManager.Instance.HitPosition.y*/);
+            //15n textMesh.text = selectedPointList.Count+1 + "";
+
+        }
+#endif
     }
 
 }

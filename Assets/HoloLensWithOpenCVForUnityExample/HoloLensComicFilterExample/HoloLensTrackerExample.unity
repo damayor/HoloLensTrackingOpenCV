@@ -1139,9 +1139,10 @@ MonoBehaviour:
   outsideClippingRatio: {x: 0.17, y: 0.19}
   clippingOffset: {x: 0.043, y: -0.025}
   vignetteScale: 1.5
-  tracker_type: 6
+  tracker_type: 3
   textMesh: {fileID: 790213230}
   textScreenGazePos: {fileID: 336731347}
+  widthBox: 100
 --- !u!23 &1076083696
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1227,7 +1228,7 @@ MonoBehaviour:
   _requestedIsFrontFacing: 0
   _requestedFPS: 30
   _rotate90Degree: 0
-  _flipVertical: 1
+  _flipVertical: 0
   _flipHorizontal: 0
   _timeoutFrameCount: 300
   onInitialized:
