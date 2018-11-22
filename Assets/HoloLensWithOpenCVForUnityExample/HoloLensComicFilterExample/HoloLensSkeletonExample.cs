@@ -57,7 +57,7 @@ namespace HoloLensWithOpenCVForUnityExample
         //Mat dstMatClippingROI;
 
 
-        public TextMesh textMesh;
+       // public TextMesh textMesh;
 
 
         // Use this for initialization
@@ -116,15 +116,15 @@ namespace HoloLensWithOpenCVForUnityExample
 
 
             //19n
-            Matrix4x4 projectionMatrix2 = webCamTextureToMatHelper.GetProjectionMatrix();
-            Matrix4x4 camera2WorldMatrix = webCamTextureToMatHelper.GetCameraToWorldMatrix();
+            //Matrix4x4 projectionMatrix2 = webCamTextureToMatHelper.GetProjectionMatrix();
+            //Matrix4x4 camera2WorldMatrix = webCamTextureToMatHelper.GetCameraToWorldMatrix();
 
-            HoloLensCameraStream.Resolution _resolution = CameraStreamHelper.Instance.GetLowestResolution();
+            //HoloLensCameraStream.Resolution _resolution = CameraStreamHelper.Instance.GetLowestResolution();
 
-            Vector3 imageCenterDirection = LocatableCameraUtils.PixelCoordToWorldCoord(camera2WorldMatrix, projectionMatrix2, _resolution, new Vector2(_resolution.width / 2, _resolution.height / 2));
-            Vector3 imageBotRightDirection = LocatableCameraUtils.PixelCoordToWorldCoord(camera2WorldMatrix, projectionMatrix2, _resolution, new Vector2(_resolution.width, _resolution.height));
-            //_laser.ShootLaserFrom(camera2WorldMatrix.GetColumn(3), imageBotRightDirection, 10f, _botRightMaterial);
-            Debug.Log(imageBotRightDirection);
+            //Vector3 imageCenterDirection = LocatableCameraUtils.PixelCoordToWorldCoord(camera2WorldMatrix, projectionMatrix2, _resolution, new Vector2(_resolution.width / 2, _resolution.height / 2));
+            //Vector3 imageBotRightDirection = LocatableCameraUtils.PixelCoordToWorldCoord(camera2WorldMatrix, projectionMatrix2, _resolution, new Vector2(_resolution.width, _resolution.height));
+            ////_laser.ShootLaserFrom(camera2WorldMatrix.GetColumn(3), imageBotRightDirection, 10f, _botRightMaterial);
+            //Debug.Log(imageBotRightDirection);
             //
 
             //HL
@@ -200,11 +200,12 @@ namespace HoloLensWithOpenCVForUnityExample
 
             Imgproc.cvtColor (bgraMat /*bgraMatClipROI*/, grayMat, Imgproc.COLOR_BGRA2GRAY);
 
-             textMesh.text = "onFrameAquired";
-
             //bgMat.copyTo (dstMatClippingROI);
 
             //Imgproc.GaussianBlur (grayMat, lineMat, new Size (3, 3), 0);
+
+           // Debug.Log("Entre al build desde el skeleton");
+
 
 
             //grayMat.get (0, 0, grayPixels);
@@ -376,8 +377,7 @@ namespace HoloLensWithOpenCVForUnityExample
         {
             LoadScene ("HoloLensWithOpenCVForUnityExample");
         }
-
-        /// <summary>
+/// <summary>
         /// Raises the play button click event.
         /// </summary>
         public void OnPlayButtonClick ()
@@ -408,5 +408,19 @@ namespace HoloLensWithOpenCVForUnityExample
         {
             webCamTextureToMatHelper.Initialize (null, webCamTextureToMatHelper.requestedWidth, webCamTextureToMatHelper.requestedHeight, !webCamTextureToMatHelper.requestedIsFrontFacing);
         }
+
+        /// <summary>
+        /// TakeScreenshot and save
+        /// </summary>
+        public void OnTakeScreenshotButtonClick()
+        {
+           // webCamTextureToMatHelper.Initialize(null, webCamTextureToMatHelper.requestedWidth, webCamTextureToMatHelper.requestedHeight, !webCamTextureToMatHelper.requestedIsFrontFacing);
+            ScreenCapture.CaptureScreenshot("Screenshots/Holog-" + System.DateTime.Now.ToString("dMHmm") + ".png");
+
+        }
+
+
+
+
     }
 }

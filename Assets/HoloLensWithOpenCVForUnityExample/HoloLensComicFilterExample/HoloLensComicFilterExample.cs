@@ -254,9 +254,9 @@ namespace HoloLensWithOpenCVForUnityExample
 
             Imgproc.cvtColor(dstMat, bgraMat, Imgproc.COLOR_GRAY2BGRA);
 
-            //
-            //Imgproc.rectangle (bgraMat, new Point (0, 0), new Point (bgraMat.width (), bgraMat.height ()), new Scalar (0, 0, 255, 255), 4);
-            //Imgproc.rectangle (bgraMat, processingAreaRect.tl(), processingAreaRect.br(), new Scalar (0, 0, 255, 255), 4);
+            //21n descommented to verify si pinta un rectangle
+            Imgproc.rectangle (bgraMat, new Point (0, 0), new Point (bgraMat.width (), bgraMat.height ()), new Scalar (0, 0, 255, 255), 4);
+            Imgproc.rectangle (bgraMat, processingAreaRect.tl(), processingAreaRect.br(), new Scalar (0, 0, 255, 255), 4);
             //
 
             bgraMatClipROI.Dispose ();
