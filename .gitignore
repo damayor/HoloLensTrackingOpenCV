@@ -13,9 +13,7 @@ sysinfo.txt
 /Assets/AssetStoreTools*
 /Assets/OpenCVForUnity/Extra/	
 Assets/OpenCVForUnity/Plugins/iOS*
-CamStream/
 /Assets/StreamingAssets/
-/Assets/CamStream/
 /.vs/
 *.apk
 *.unitypackage
