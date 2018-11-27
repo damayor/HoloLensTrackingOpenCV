@@ -9,9 +9,8 @@ using System.Linq;
 namespace HoloLensWithOpenCVForUnityExample
 {
     /// <summary>
-    /// HoloLens Comic Filter Example
-    /// An example of image processing (comic filter) using OpenCVForUnity on Hololens.
-    /// Referring to http://dev.classmethod.jp/smartphone/opencv-manga-2/.
+    /// HoloLens Skeleton example
+    /// An example of image on the Hololens. Shows what the cam sees
     /// </summary>
     [RequireComponent(typeof(HololensCameraStreamToMatHelper))]
     public class HoloLensSkeletonExample : ExampleSceneBase
@@ -52,9 +51,6 @@ namespace HoloLensWithOpenCVForUnityExample
         public Vector2 outsideClippingRatio = new Vector2(0.17f, 0.19f);
         public Vector2 clippingOffset = new Vector2(0.043f, -0.025f);
         public float vignetteScale = 1.5f;
-
-
-        //Mat dstMatClippingROI;
 
 
        // public TextMesh textMesh;
@@ -115,17 +111,6 @@ namespace HoloLensWithOpenCVForUnityExample
 #else
 
 
-            //19n
-            //Matrix4x4 projectionMatrix2 = webCamTextureToMatHelper.GetProjectionMatrix();
-            //Matrix4x4 camera2WorldMatrix = webCamTextureToMatHelper.GetCameraToWorldMatrix();
-
-            //HoloLensCameraStream.Resolution _resolution = CameraStreamHelper.Instance.GetLowestResolution();
-
-            //Vector3 imageCenterDirection = LocatableCameraUtils.PixelCoordToWorldCoord(camera2WorldMatrix, projectionMatrix2, _resolution, new Vector2(_resolution.width / 2, _resolution.height / 2));
-            //Vector3 imageBotRightDirection = LocatableCameraUtils.PixelCoordToWorldCoord(camera2WorldMatrix, projectionMatrix2, _resolution, new Vector2(_resolution.width, _resolution.height));
-            ////_laser.ShootLaserFrom(camera2WorldMatrix.GetColumn(3), imageBotRightDirection, 10f, _botRightMaterial);
-            //Debug.Log(imageBotRightDirection);
-            //
 
             //HL
             //This value is obtained from PhotoCapture's TryGetProjectionMatrix() method.I do not know whether this method is good.
@@ -190,8 +175,7 @@ namespace HoloLensWithOpenCVForUnityExample
             Debug.Log ("OnWebCamTextureToMatHelperErrorOccurred " + errorCode);
         }
 
-        //alo? cual si se corre?
-        //OnFrameMatAcquired == update pero para el HL?
+        //Update for the Hololens
         /*9n */
 #if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
         public void OnFrameMatAcquired (Mat bgraMat, Matrix4x4 projectionMatrix, Matrix4x4 cameraToWorldMatrix)
@@ -200,47 +184,7 @@ namespace HoloLensWithOpenCVForUnityExample
 
             Imgproc.cvtColor (bgraMat /*bgraMatClipROI*/, grayMat, Imgproc.COLOR_BGRA2GRAY);
 
-            //bgMat.copyTo (dstMatClippingROI);
-
-            //Imgproc.GaussianBlur (grayMat, lineMat, new Size (3, 3), 0);
-
-           // Debug.Log("Entre al build desde el skeleton");
-
-
-
-            //grayMat.get (0, 0, grayPixels);
-
-            //for (int i = 0; i < grayPixels.Length; i++) {
-            //    maskPixels [i] = 0;
-
-            //    if (grayPixels [i] < 70) {
-            //        grayPixels [i] = 0;
-            //        maskPixels [i] = 1;
-            //    } else if (70 <= grayPixels [i] && grayPixels [i] < 120) {
-            //        grayPixels [i] = 100;
-
-            //    } else {
-            //        grayPixels [i] = 255;
-            //        maskPixels [i] = 1;
-            //    }
-            //}
-
-            //grayMat.put (0, 0, grayPixels);
-            //maskMat.put (0, 0, maskPixels);
-            //grayMat.copyTo (dstMatClippingROI, maskMat);
-
-
-           
-
-
-            //Imgproc.putText (dstMat, "W:" + dstMat.width () + " H:" + dstMat.height () + " SO:" + Screen.orientation, new Point (5, dstMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar (0), 2, Imgproc.LINE_AA, false);
-
-            //Imgproc.cvtColor(dstMat, bgraMat, Imgproc.COLOR_GRAY2BGRA);
-
-            //
-            //Imgproc.rectangle (bgraMat, new Point (0, 0), new Point (bgraMat.width (), bgraMat.height ()), new Scalar (0, 0, 255, 255), 4);
-            //Imgproc.rectangle (bgraMat, processingAreaRect.tl(), processingAreaRect.br(), new Scalar (0, 0, 255, 255), 4);
-            //
+           //// Here goes the code
 
 
             //new HL
@@ -271,7 +215,7 @@ namespace HoloLensWithOpenCVForUnityExample
 
 #else
 
-        // Update is called once per frame
+        // Update for unity and holographic emulation
         void Update ()
         {
             if (webCamTextureToMatHelper.IsPlaying () && webCamTextureToMatHelper.DidUpdateThisFrame ()) {
@@ -284,44 +228,7 @@ namespace HoloLensWithOpenCVForUnityExample
 
                 // todo lo nuevo
 
-                //bgMat.copyTo (dstMatClippingROI);
-
-                //Imgproc.GaussianBlur (grayMat, lineMat, new Size (3, 3), 0);
-
-
-                //grayMat.get (0, 0, grayPixels);
-
-                //for (int i = 0; i < grayPixels.Length; i++) {
-
-                //    maskPixels [i] = 0;
-
-                //    if (grayPixels [i] < 70) {
-                //        grayPixels [i] = 0;
-                //        maskPixels [i] = 1;
-                //    } else if (70 <= grayPixels [i] && grayPixels [i] < 120) {
-                //        grayPixels [i] = 100;
-
-                //    } else {
-                //        grayPixels [i] = 255;
-                //        maskPixels [i] = 1;
-                //    }
-                //}
-
-               //// grayMat.put (0, 0, grayPixels);
-               //9n maskMat.put (0, 0, maskPixels);
-               // grayMat.copyTo (dstMatClippingROI, maskMat);
-
-
-               // Imgproc.Canny (lineMat, lineMat, 20, 120);
-
-               // lineMat.copyTo (maskMat);
-
-               // Core.bitwise_not (lineMat, lineMat);
-
-               // lineMat.copyTo (dstMatClippingROI, maskMat);
-
-
-                //Imgproc.putText (dstMat, "W:" + dstMat.width () + " H:" + dstMat.height () + " SO:" + Screen.orientation, new Point (5, dstMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar (0), 2, Imgproc.LINE_AA, false);
+                
 
               //9n  Imgproc.cvtColor(dstMat, rgbaMat, Imgproc.COLOR_GRAY2RGBA);
 

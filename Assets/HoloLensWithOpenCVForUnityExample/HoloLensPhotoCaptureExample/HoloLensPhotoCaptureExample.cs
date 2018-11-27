@@ -8,10 +8,16 @@ using HoloToolkit.Unity.InputModule;
 using UnityEngine.XR.WSA.WebCam;
 using UnityEngine.XR.WSA.Input;
 using WSAWebCamCameraParameters = UnityEngine.XR.WSA.WebCam.CameraParameters;
+using System.IO;
 #else
 using UnityEngine.VR.WSA.WebCam;
 using UnityEngine.VR.WSA.Input;
 using WSAWebCamCameraParameters = UnityEngine.VR.WSA.WebCam.CameraParameters;
+#endif
+
+#if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
+using Windows.Storage;
+using System.Threading.Tasks;
 #endif
 
 using OpenCVForUnity;
@@ -27,11 +33,13 @@ namespace HoloLensWithOpenCVForUnityExample
     {
         GestureRecognizer m_GestureRecognizer;
         GameObject m_Canvas = null;
-        Renderer m_CanvasRenderer = null;
+        public Renderer m_CanvasRenderer; //= null;
         PhotoCapture m_PhotoCaptureObj;
         WSAWebCamCameraParameters m_CameraParameters;
         bool m_CapturingPhoto = false;
         Texture2D m_Texture = null;
+
+        Renderer myRend;
 
         /// <summary>
         /// The rgba mat.
@@ -58,82 +66,85 @@ namespace HoloLensWithOpenCVForUnityExample
         /// </summary>
         Color32[] colors;
 
-        protected override void Start ()
+        protected override void Start()
         {
-            base.Start ();
+            base.Start();
 
-            m_Canvas = GameObject.Find ("PhotoCaptureCanvas");
-            m_CanvasRenderer = m_Canvas.GetComponent<Renderer> () as Renderer;
+            m_Canvas = GameObject.Find("PhotoCaptureCanvas");
+            //m_CanvasRenderer = m_Canvas.GetComponent<Renderer>() as Renderer; //23n edited
+            myRend = m_Canvas.GetComponent<Renderer>() as Renderer;
+
+            myRend.enabled = false;
             m_CanvasRenderer.enabled = false;
 
-            Initialize ();
+            Initialize();
         }
 
-        void SetupGestureRecognizer ()
+        void SetupGestureRecognizer()
         {
-            m_GestureRecognizer = new GestureRecognizer ();
-            m_GestureRecognizer.SetRecognizableGestures (GestureSettings.Tap);
-            #if UNITY_2017_2_OR_NEWER
+            m_GestureRecognizer = new GestureRecognizer();
+            m_GestureRecognizer.SetRecognizableGestures(GestureSettings.Tap);
+#if UNITY_2017_2_OR_NEWER
             m_GestureRecognizer.Tapped += OnTappedEvent;
-            #else
+#else
             m_GestureRecognizer.TappedEvent += OnTappedEvent;
-            #endif
-            m_GestureRecognizer.StartCapturingGestures ();
+#endif
+            m_GestureRecognizer.StartCapturingGestures();
 
             m_CapturingPhoto = false;
         }
 
-        void Initialize ()
+        void Initialize()
         {
-            Debug.Log ("Initializing...");
-            List<Resolution> resolutions = new List<Resolution> (PhotoCapture.SupportedResolutions);
-            Resolution selectedResolution = resolutions [1];
+            Debug.Log("Initializing...");
+            List<Resolution> resolutions = new List<Resolution>(PhotoCapture.SupportedResolutions);
+            Resolution selectedResolution = resolutions[1];
 
             foreach (var item in resolutions) {
-                Debug.Log ("resolution width " + item.width + " height " + item.height);
+                Debug.Log("resolution width " + item.width + " height " + item.height);
             }
 
-            m_CameraParameters = new WSAWebCamCameraParameters (WebCamMode.PhotoMode);
+            m_CameraParameters = new WSAWebCamCameraParameters(WebCamMode.PhotoMode);
             m_CameraParameters.cameraResolutionWidth = selectedResolution.width;
             m_CameraParameters.cameraResolutionHeight = selectedResolution.height;
             m_CameraParameters.hologramOpacity = 0.0f;
             m_CameraParameters.pixelFormat = CapturePixelFormat.BGRA32;
 
-            m_Texture = new Texture2D (selectedResolution.width, selectedResolution.height, TextureFormat.BGRA32, false);
+            m_Texture = new Texture2D(selectedResolution.width, selectedResolution.height, TextureFormat.BGRA32, false);
 
 
-            rgbaMat = new Mat (m_Texture.height, m_Texture.width, CvType.CV_8UC4);
-            colors = new Color32[rgbaMat.cols () * rgbaMat.rows ()];
-            grayMat = new Mat (rgbaMat.rows (), rgbaMat.cols (), CvType.CV_8UC1);
+            rgbaMat = new Mat(m_Texture.height, m_Texture.width, CvType.CV_8UC4);
+            colors = new Color32[rgbaMat.cols() * rgbaMat.rows()];
+            grayMat = new Mat(rgbaMat.rows(), rgbaMat.cols(), CvType.CV_8UC1);
 
-            faces = new MatOfRect ();
+            faces = new MatOfRect();
 
-            cascade = new CascadeClassifier ();
-            cascade.load (Utils.getFilePath ("haarcascade_frontalface_alt.xml"));
+            cascade = new CascadeClassifier();
+            cascade.load(Utils.getFilePath("haarcascade_frontalface_alt.xml"));
 
 
-            PhotoCapture.CreateAsync (false, OnCreatedPhotoCaptureObject);
+            PhotoCapture.CreateAsync(false, OnCreatedPhotoCaptureObject);
         }
 
-        void OnCreatedPhotoCaptureObject (PhotoCapture captureObject)
+        void OnCreatedPhotoCaptureObject(PhotoCapture captureObject)
         {
             m_PhotoCaptureObj = captureObject;
-            m_PhotoCaptureObj.StartPhotoModeAsync (m_CameraParameters, OnStartPhotoMode);
+            m_PhotoCaptureObj.StartPhotoModeAsync(m_CameraParameters, OnStartPhotoMode);
         }
 
-        void OnStartPhotoMode (PhotoCapture.PhotoCaptureResult result)
+        void OnStartPhotoMode(PhotoCapture.PhotoCaptureResult result)
         {
-            SetupGestureRecognizer ();
+            SetupGestureRecognizer();
 
-            Debug.Log ("Ready!");
-            Debug.Log ("Air Tap to take a picture.");
+            Debug.Log("Ready!");
+            Debug.Log("Air Tap to take a picture.");
         }
 
-        #if UNITY_2017_2_OR_NEWER
-        void OnTappedEvent (TappedEventArgs args)
-        #else
+#if UNITY_2017_2_OR_NEWER
+        void OnTappedEvent(TappedEventArgs args)
+#else
         void OnTappedEvent (InteractionSourceKind source, int tapCount, Ray headRay)
-        #endif
+#endif
         {
             // Determine if a Gaze pointer is over a GUI.
             if (GazeManager.Instance.HitObject != null && GazeManager.Instance.HitObject.transform.name == "Text") {
@@ -146,115 +157,161 @@ namespace HoloLensWithOpenCVForUnityExample
 
             m_CanvasRenderer.enabled = false;
             m_CapturingPhoto = true;
-            Debug.Log ("Taking picture...WIIIII ES ACA!!");
-            m_PhotoCaptureObj.TakePhotoAsync (OnPhotoCaptured);
+            Debug.Log("Taking picture...WIIIII ES ACA!!");
+            m_PhotoCaptureObj.TakePhotoAsync(OnPhotoCaptured);
         }
 
-        void OnPhotoCaptured (PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame)
+        void OnPhotoCaptured(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame)
         {
 
             Matrix4x4 cameraToWorldMatrix;
-            photoCaptureFrame.TryGetCameraToWorldMatrix (out cameraToWorldMatrix);
+            photoCaptureFrame.TryGetCameraToWorldMatrix(out cameraToWorldMatrix);
             Matrix4x4 worldToCameraMatrix = cameraToWorldMatrix.inverse;
 
             Matrix4x4 projectionMatrix;
-            photoCaptureFrame.TryGetProjectionMatrix (out projectionMatrix);
+            photoCaptureFrame.TryGetProjectionMatrix(out projectionMatrix);
 
-            photoCaptureFrame.UploadImageDataToTexture (m_Texture);
+            //23N nuetro pantallazo esta en m_Texture
+            photoCaptureFrame.UploadImageDataToTexture(m_Texture);
 
+            SaveTextureToImageFile(m_Texture);
+            
+            Utils.texture2DToMat(m_Texture, rgbaMat);
 
-            Utils.texture2DToMat (m_Texture, rgbaMat);
-
-            Imgproc.cvtColor (rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
-            Imgproc.equalizeHist (grayMat, grayMat);
+            Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
+            Imgproc.equalizeHist(grayMat, grayMat);
 
             // fill all black.
             //Imgproc.rectangle (rgbaMat, new Point (0, 0), new Point (rgbaMat.width (), rgbaMat.height ()), new Scalar (0, 0, 0, 0), -1);
             // draw an edge lines.
-            Imgproc.rectangle (rgbaMat, new Point (0, 0), new Point (rgbaMat.width (), rgbaMat.height ()), new Scalar (255, 0, 0, 255), 2);
+            Imgproc.rectangle(rgbaMat, new Point(0, 0), new Point(rgbaMat.width(), rgbaMat.height()), new Scalar(255, 0, 0, 255), 2);
             // draw a diagonal line.
             //Imgproc.line (rgbaMat, new Point (0, 0), new Point (rgbaMat.cols (), rgbaMat.rows ()), new Scalar (255, 0, 0, 255));
 
             if (cascade != null)
-                cascade.detectMultiScale (grayMat, faces, 1.1, 2, 2, // TODO: objdetect.CV_HAAR_SCALE_IMAGE
-                    new Size (grayMat.cols () * 0.05, grayMat.rows () * 0.05), new Size ());
+                cascade.detectMultiScale(grayMat, faces, 1.1, 2, 2, // TODO: objdetect.CV_HAAR_SCALE_IMAGE
+                    new Size(grayMat.cols() * 0.05, grayMat.rows() * 0.05), new Size());
 
-            OpenCVForUnity.Rect[] rects = faces.toArray ();
+            OpenCVForUnity.Rect[] rects = faces.toArray();
             for (int i = 0; i < rects.Length; i++) {
                 //Debug.Log ("detect faces " + rects [i]);
-                Imgproc.rectangle (rgbaMat, new Point (rects [i].x, rects [i].y), new Point (rects [i].x + rects [i].width, rects [i].y + rects [i].height), new Scalar (255, 0, 0, 255), 2);
+                Imgproc.rectangle(rgbaMat, new Point(rects[i].x, rects[i].y), new Point(rects[i].x + rects[i].width, rects[i].y + rects[i].height), new Scalar(255, 0, 0, 255), 2);
             }
 
-            Imgproc.putText (rgbaMat, "W:" + rgbaMat.width () + " H:" + rgbaMat.height () + " SO:" + Screen.orientation, new Point (5, rgbaMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 1.5, new Scalar (0, 255, 0, 255), 2, Imgproc.LINE_AA, false);
+            Imgproc.putText(rgbaMat, "W:" + rgbaMat.width() + " H:" + rgbaMat.height() + " SO:" + Screen.orientation, new Point(5, rgbaMat.rows() - 10), Core.FONT_HERSHEY_SIMPLEX, 1.5, new Scalar(0, 255, 0, 255), 2, Imgproc.LINE_AA, false);
 
-            Utils.matToTexture2D (rgbaMat, m_Texture, colors);
+            Utils.matToTexture2D(rgbaMat, m_Texture, colors);
 
 
             m_Texture.wrapMode = TextureWrapMode.Clamp;
 
             m_CanvasRenderer.enabled = true;
-            m_CanvasRenderer.sharedMaterial.SetTexture ("_MainTex", m_Texture);
-            m_CanvasRenderer.sharedMaterial.SetMatrix ("_WorldToCameraMatrix", worldToCameraMatrix);
-            m_CanvasRenderer.sharedMaterial.SetMatrix ("_CameraProjectionMatrix", projectionMatrix);
-            m_CanvasRenderer.sharedMaterial.SetVector ("_VignetteOffset", new Vector4(0, 0));
-            m_CanvasRenderer.sharedMaterial.SetFloat ("_VignetteScale", 0.0f);
+            m_CanvasRenderer.sharedMaterial.SetTexture("_MainTex", m_Texture);
+            m_CanvasRenderer.sharedMaterial.SetMatrix("_WorldToCameraMatrix", worldToCameraMatrix);
+            m_CanvasRenderer.sharedMaterial.SetMatrix("_CameraProjectionMatrix", projectionMatrix);
+            m_CanvasRenderer.sharedMaterial.SetVector("_VignetteOffset", new Vector4(0, 0));
+            m_CanvasRenderer.sharedMaterial.SetFloat("_VignetteScale", 0.0f);
 
             // Position the canvas object slightly in front
             // of the real world web camera.
-            Vector3 position = cameraToWorldMatrix.GetColumn (3) - cameraToWorldMatrix.GetColumn (2);
+            Vector3 position = cameraToWorldMatrix.GetColumn(3) - cameraToWorldMatrix.GetColumn(2);
             position *= 1.2f;
 
             // Rotate the canvas object so that it faces the user.
-            Quaternion rotation = Quaternion.LookRotation (-cameraToWorldMatrix.GetColumn (2), cameraToWorldMatrix.GetColumn (1));
+            Quaternion rotation = Quaternion.LookRotation(-cameraToWorldMatrix.GetColumn(2), cameraToWorldMatrix.GetColumn(1));
 
             m_Canvas.transform.position = position;
             m_Canvas.transform.rotation = rotation;
 
-            Debug.Log ("Took picture!");
-            Debug.Log ("projectionMatrix:\n" + projectionMatrix.ToString());
+            Debug.Log("Took picture!");
+            Debug.Log("projectionMatrix:\n" + projectionMatrix.ToString());
             m_CapturingPhoto = false;
         }
 
-        void OnStopPhotoMode (PhotoCapture.PhotoCaptureResult result)
+        void OnStopPhotoMode(PhotoCapture.PhotoCaptureResult result)
         {
-            Debug.Log ("StopPhotoMode!");
-            m_PhotoCaptureObj.Dispose ();
+            Debug.Log("StopPhotoMode!");
+            m_PhotoCaptureObj.Dispose();
         }
 
         /// <summary>
         /// Raises the destroy event.
         /// </summary>
-        void OnDestroy ()
+        void OnDestroy()
         {
             if (m_PhotoCaptureObj != null)
-                m_PhotoCaptureObj.StopPhotoModeAsync (OnStopPhotoMode);
+                m_PhotoCaptureObj.StopPhotoModeAsync(OnStopPhotoMode);
 
             if (m_GestureRecognizer != null && m_GestureRecognizer.IsCapturingGestures()) {
-                m_GestureRecognizer.StopCapturingGestures ();
-                #if UNITY_2017_2_OR_NEWER
+                m_GestureRecognizer.StopCapturingGestures();
+#if UNITY_2017_2_OR_NEWER
                 m_GestureRecognizer.Tapped -= OnTappedEvent;
-                #else
+#else
                 m_GestureRecognizer.TappedEvent -= OnTappedEvent;
-                #endif
-                m_GestureRecognizer.Dispose ();
+#endif
+                m_GestureRecognizer.Dispose();
             }
 
             if (rgbaMat != null)
-                rgbaMat.Dispose ();
+                rgbaMat.Dispose();
 
             if (grayMat != null)
-                grayMat.Dispose ();
+                grayMat.Dispose();
 
             if (cascade != null)
-                cascade.Dispose ();
+                cascade.Dispose();
         }
 
         /// <summary>
         /// Raises the back button click event.
         /// </summary>
-        public void OnBackButtonClick ()
+        public void OnBackButtonClick()
         {
-            LoadScene ("HoloLensWithOpenCVForUnityExample");
+            LoadScene("HoloLensWithOpenCVForUnityExample");
         }
+
+         public void createFile()
+        {
+#if WINDOWS_UWP
+            
+             StorageFolder picturesFolder = KnownFolders.CameraRoll;
+             StorageFile sampleFile;
+            
+            Task task = new Task(
+            async () =>
+            {
+                //testText.text = "hi";
+                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                //  StorageFile textFileForWrite = await storageFolder.CreateFileAsync("Myfile.txt");
+            });
+            task.Start();
+            task.Wait();
+#endif
+        }
+
+        public void SaveTextureToImageFile(Texture2D m_Texture)
+        {
+            byte[] bytes = m_Texture.EncodeToJPG();
+           
+            string path = Application.dataPath + "/../" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + "_myHololens.jpg";
+
+            //C:\Users\User\AppData\LocalLow\DefaultCompany\{projectName}
+            string pathHL = Path.Combine(Application.persistentDataPath, System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + "_myCombineHololens.jpg");
+
+            //File.WriteAllBytes(Application.dataPath + "/../" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + "_myHololens.jpg", bytes);
+            File.WriteAllBytes(path, bytes);
+
+            File.WriteAllBytes(pathHL, bytes);
+
+            Debug.Log("saved as jpg");
+
+            //string path = Path.Combine(Application.persistentDataPath, "MyFile201888.png");
+            //using (TextWriter writer = File.CreateText(path))
+            //{
+            //    File.WriteAllBytes(Application.dataPath + "/../SavedScreen.png", bytes);
+            //}
+
+        }
+
     }
 }

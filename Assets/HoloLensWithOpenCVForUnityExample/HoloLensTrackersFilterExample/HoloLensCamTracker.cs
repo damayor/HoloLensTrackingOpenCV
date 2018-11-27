@@ -10,6 +10,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.XR.WSA.Input;
 using HoloToolkit.Unity.InputModule;
 using System;
+using System.IO;
+
 
 namespace HoloLensWithOpenCVForUnityExample
 {
@@ -92,7 +94,8 @@ namespace HoloLensWithOpenCVForUnityExample
 
         public float widthBox = 100f;
 
-  
+        Vector3 carPosition;
+
 
         // Use this for initialization
         protected override void Start()
@@ -142,6 +145,8 @@ namespace HoloLensWithOpenCVForUnityExample
             texture.wrapMode = TextureWrapMode.Clamp;
 
             Debug.Log("Screen.width " + Screen.width + " Screen.height " + Screen.height + " Screen.orientation " + Screen.orientation);
+
+            Debug.Log("ScreenMat.width " + webCamTextureMat.width() + " ScreenMat.height " + webCamTextureMat.height());
 
 
             processingAreaRect = new OpenCVForUnity.Rect((int)(webCamTextureMat.cols() * (outsideClippingRatio.x - clippingOffset.x)), (int)(webCamTextureMat.rows() * (outsideClippingRatio.y + clippingOffset.y)),
@@ -249,6 +254,9 @@ namespace HoloLensWithOpenCVForUnityExample
             Debug.Log("OnWebCamTextureToMatHelperErrorOccurred " + errorCode);
         }
 
+        Ray ray;
+        RaycastHit hit;
+
 
         //OnFrameMatAcquired == update pero para el HL builded
         /*20n versionskeleton */
@@ -260,7 +268,7 @@ namespace HoloLensWithOpenCVForUnityExample
 
             //Debug.Log("Entré al onframeaquired desde el tracker");
 
-            Debug.Log("si hay puntos " + p1.x.ToString("0.00") + ";" + p1.y.ToString("0.00")); //yep 
+            //26n Debug.Log("si hay puntos " + p1.x.ToString("0.00") + ";" + p1.y.ToString("0.00")); //yep 
                                                                                                //textDebug.text = "p2:"+p2.x +","+ p2.y;  //nunca maaaas mesh.text en un upate del HL
             Imgproc.circle(bgraMat, p1, 6, new Scalar(255, 0, 0, 255), 2);
 
@@ -273,8 +281,8 @@ namespace HoloLensWithOpenCVForUnityExample
             {
                 selectedPointList.Add(storedTouchPoint);
 
-                p1 = storedTouchPoint; //22n comparemos aca a ver quien tiene al culpa
-                p2 = new Point(storedTouchPoint.x - 200, storedTouchPoint.y - 150);
+                p1 = new Point(storedTouchPoint.x - 50, storedTouchPoint.y - 50);
+                p2 = new Point(storedTouchPoint.x + 50, storedTouchPoint.y + 50);
                 selectedPointList.Add(p2);
 
                 //Imgproc.circle(bgraMat, p2, 6, new Scalar(0, 0, 0, 255), 2);
@@ -286,7 +294,6 @@ namespace HoloLensWithOpenCVForUnityExample
 
                     SelectTracker(tracker_type);   //16n monotracker = TrackerKCF.create(); //8n
                     trackerInitialized = monotracker.init(grayMat, new Rect2d(region.x, region.y, region.width, region.height));
-                    Debug.Log("region de ancho " + region.width);
                 }
 
                 storedTouchPoint = null;
@@ -320,13 +327,36 @@ namespace HoloLensWithOpenCVForUnityExample
                 {
                     Debug.Log("tracking por aca:" + bbox.x + ";" + bbox.y);
                     Imgproc.rectangle(bgraMat, bbox.tl(), bbox.br(), new Scalar(255, 255, 255, 255), 2, 1, 0);
+
                     previousBox = new Rect2d(bbox.x, bbox.y, bbox.width, bbox.height);
+
+                    // ------ 3D LOCATION
+                    //Todo not achieved, cant neither debug, is always stucked here, i think is becaus Camera.main  carPosition = Camera.main.ScreenToWorldPoint(new Vector3((float)(bbox.x /*+ bbox.width/2*/), (float)(bbox.y /*+ bbox.height / 2*/), Camera.main.nearClipPlane));
+
+                    //26n esa caja conviertamela a 3D, donde pegue con algo fisico
+                    //26n carPosition = ScreenToWorldCords(new Point((float)(bbox.x /*+ bbox.width/2*/), (float)(bbox.y /*+ bbox.height / 2*/)));
+
+                    //ray = Camera.main.ScreenPointToRay(new Vector3((float)(bbox.x /*+ bbox.width/2*/), (float)(bbox.y /*+ bbox.height / 2*/),0));
+
+
+                    /*if (Physics.Raycast(ray, out hit))
+                    {
+                       print("I'm looking at " + carPosition);
+                        carPosition = hit.transform.position;
+                         Debug.Log("the car is in" + carPosition);
+                    }
+                    //else
+                        //print("I'm looking at nothing!");*/
+
                 }
-                /*else
+                else
                 {
-                    Debug.Log("Se perdio en:" + previousBox.x + ";" + previousBox.y);
-                    Imgproc.rectangle(bgraMat, previousBox.tl(), previousBox.br(), new Scalar(0, 0, 255, 255), 2, 1, 0); //8n
-                }*/
+                    if (previousBox != null)
+                    {
+                        Debug.Log("Se perdio en:" + previousBox.x + ";" + previousBox.y);
+                        Imgproc.rectangle(bgraMat, previousBox.tl(), previousBox.br(), new Scalar(0, 0, 255, 255), 2, 1, 0); //8n
+                    }
+                }
             }
 
 
@@ -361,6 +391,8 @@ namespace HoloLensWithOpenCVForUnityExample
 
 #else
 
+
+
         // Update is called once per frame, in webcam
         void Update()
         {
@@ -385,11 +417,11 @@ namespace HoloLensWithOpenCVForUnityExample
 
                     //Imgproc.circle(rgbaMat, storedTouchPoint, 6, new Scalar(0, 0, 255, 255), 2);
 
-                    p1 = storedTouchPoint; //22n comparemos aca a ver quien tiene al culpa
-                    p2 = new Point ( storedTouchPoint.x - 300, storedTouchPoint.y - 150);
+                    p1 = new Point(storedTouchPoint.x - 100, storedTouchPoint.y - 100);
+                    p2 = new Point ( storedTouchPoint.x + 100, storedTouchPoint.y + 100);
                     selectedPointList.Add(p2);
 
-                    Imgproc.circle(rgbaMat, p2, 6, new Scalar(0, 255, 255, 255), 2);
+                    //Imgproc.circle(rgbaMat, p2, 6, new Scalar(0, 255, 255, 255), 2);
 
 
                     using (MatOfPoint selectedPointMat = new MatOfPoint(selectedPointList.ToArray()))
@@ -416,11 +448,27 @@ namespace HoloLensWithOpenCVForUnityExample
                         //Debug.Log("tracking por aca:" + bbox.x + ";" + bbox.y);
                         Imgproc.rectangle(rgbaMat, bbox.tl(), bbox.br(), new Scalar(255, 255, 255, 255), 2, 1, 0);
                         previousBox = new Rect2d(bbox.x, bbox.y, bbox.width, bbox.height);
+                        ////26n esa caja conviertamela a 3D, donde pegue con algo fisico
+                        ////26n Vector3 carPosition = ScreenToWorldCords(new Point(), bbox);
+                        //ray = Camera.main.ViewportPointToRay(new Vector3((float)(bbox.x /*+ bbox.width/2*/), (float) (bbox.y /*+ bbox.height / 2*/), 0));
+
+                        //if (Physics.Raycast(ray, out hit))
+                        //{
+                        //    print("I'm looking at " + hit.transform.position);
+                        //    carPosition = hit.transform.position;
+                        //   // Debug.Log("the car is in" + carPosition);
+                        //}
+                        //else
+                        //    print("I'm looking at nothing!");
+
                     }
                     else
                     {
-                        Debug.Log("Se perdio en:" + previousBox.x + ";" + previousBox.y);
-                        Imgproc.rectangle(rgbaMat, previousBox.tl(), previousBox.br(), new Scalar(255, 0, 0, 255), 2, 1, 0); //8n
+                        if (previousBox != null)
+                        {
+                            Debug.Log("Se perdio en:" + previousBox.x + ";" + previousBox.y);
+                            Imgproc.rectangle(rgbaMat, previousBox.tl(), previousBox.br(), new Scalar(255, 0, 0, 255), 2, 1, 0); //8n
+                        }
                     }
                 }
 
@@ -587,9 +635,17 @@ namespace HoloLensWithOpenCVForUnityExample
         public void OnTakeScreenshotButtonClick()
         {
             // webCamTextureToMatHelper.Initialize(null, webCamTextureToMatHelper.requestedWidth, webCamTextureToMatHelper.requestedHeight, !webCamTextureToMatHelper.requestedIsFrontFacing);
+
+
             
             ScreenCapture.CaptureScreenshot( "Screenshots/Holog-" + System.DateTime.Now.ToString("dMHmm") + ".png");
             //Todebug here
+            //23n
+            //string path = Path.Combine(Application.persistentDataPath, "MyFile.txt");
+            //using (TextWriter writer = File.CreateText(path))
+            //{
+            //    // TODO write text here
+            //}
 
         }
 
@@ -648,7 +704,7 @@ namespace HoloLensWithOpenCVForUnityExample
          float2 ImagePosProjected = ImagePosUnnormalized.xy / ImagePosUnnormalized.w; // normalize by W, gives -1 to 1 space
          float2 ImagePosZeroToOne = (ImagePosProjected * 0.5) + float2(0.5, 0.5); // good for GPU textures
          int2 PixelPos = int2(ImagePosZeroToOne.x * ImageWidth, (1 - ImagePosZeroToOne.y) * ImageHeight); // good for CPU textures*/
-        public static Point WorldCoordsToScreen(Matrix4x4 cameraToWorldMatrix, Matrix4x4 projectionMatrix, /*HoloLensCameraStream.Resolution cameraResolution,*/ Vector3 worldSpacePos /*not used because of gaze*/)
+        public static Point WorldCoordsToScreen(Matrix4x4 cameraToWorldMatrix, Matrix4x4 projectionMatrix, /*HoloLensCameraStream.Resolution cameraResolution,*/ Vector3 worldSpacePos /*not used because of gaze*/, Mat camMat)
         {
 
             Matrix4x4 worldToCamera = Matrix4x4.Inverse(cameraToWorldMatrix);
@@ -658,9 +714,43 @@ namespace HoloLensWithOpenCVForUnityExample
             Vector4 ImagePosUnnormalized = projectionMatrix * new Vector4(cameraSpacePos.x, cameraSpacePos.y, cameraSpacePos.z, 1); // use 1 as the W component
             Vector2 ImagePosProjected = new Vector2( ImagePosUnnormalized.x / ImagePosUnnormalized.w, ImagePosUnnormalized.y / ImagePosUnnormalized.w); // normalize by W, gives -1 to 1 space
             Vector2 ImagePosZeroToOne = (ImagePosProjected * 0.5f) + new Vector2(0.5f, 0.5f); // good for GPU textures
-            Vector2 pixelPos = new Vector2(ImagePosZeroToOne.x * Screen.width, (1 - ImagePosZeroToOne.y) * Screen.height); // good for CPU textures
+            Vector2 pixelPos = new Vector2(ImagePosZeroToOne.x * camMat.width(), (1 - ImagePosZeroToOne.y) * camMat.height()); // good for CPU textures
 
             return new Point (pixelPos.x, pixelPos.y); 
+        }
+
+
+
+
+
+        public Vector3 ScreenToWorldCords(Point pixelPos)
+        {
+
+            Matrix4x4 cameraToWorldMatrix = webCamTextureToMatHelper.GetCameraToWorldMatrix();
+            Matrix4x4 projectionMatrix = webCamTextureToMatHelper.GetProjectionMatrix();
+
+            Vector2 imagePosZeroToOne = new Vector2 ((float) pixelPos.x / webCamTextureToMatHelper.GetMat().width(), (float) ( 1.0 - (pixelPos.y / webCamTextureToMatHelper.GetMat().height())));
+
+
+            Vector2 imagePosProjected = ((imagePosZeroToOne * 2.0f) - new Vector2(1, 1)); // -1 to 1 space
+            Vector3 CameraSpacePos = UnProjectVector(projectionMatrix, new Vector3(imagePosProjected.x,imagePosProjected.y , 1));
+            Vector3 WorldSpaceRayPoint1 = cameraToWorldMatrix * new Vector4(0, 0, 0, 1); // camera location in world space
+            print(" Im looking firstly to " + WorldSpaceRayPoint1);
+            Vector3 WorldSpaceRayPoint2 = cameraToWorldMatrix * CameraSpacePos; // ray point in world space
+
+            return WorldSpaceRayPoint2;
+        }
+
+        public static Vector3 UnProjectVector(Matrix4x4 proj, Vector3 to)
+        {
+            Vector3 from = new Vector3(0, 0, 0);
+            var axsX = proj.GetRow(0);
+            var axsY = proj.GetRow(1);
+            var axsZ = proj.GetRow(2);
+            from.z = to.z / axsZ.z;
+            from.y = (to.y - (from.z * axsY.z)) / axsY.y;
+            from.x = (to.x - (from.z * axsX.z)) / axsX.x;
+            return from;
         }
 
 
@@ -703,9 +793,11 @@ namespace HoloLensWithOpenCVForUnityExample
                 sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
             }
 
-            sphere.transform.position = GazeManager.Instance.HitPosition;
-            storedTouchPoint = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), sphere.transform.position);//19N
-                                                                                                                                                                                 //    textMesh.text = storedTouchPoint.x + ";" + storedTouchPoint.y;
+            Vector3 tapInRoom = GazeManager.Instance.HitPosition;
+            sphere.transform.position = tapInRoom;
+            Debug.Log("Tap in room" + tapInRoom.ToString("0.00f"));
+            storedTouchPoint = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), tapInRoom, webCamTextureToMatHelper.GetMat());//19N
+                                                                                                                                                                              
             textMesh.text = storedTouchPoint.x + ";" + storedTouchPoint.y;
 
 

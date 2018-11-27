@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using OpenCVForUnity;
 using UnityEngine.UI;
+using OpenCVForUnityExample;
 
 #if UNITY_5_3 || UNITY_5_3_OR_NEWER
 using UnityEngine.SceneManagement;
@@ -16,7 +17,7 @@ namespace OpenCVForUnitySample
     /// An example of saving a video file using the VideoWriter class.
     /// http://docs.opencv.org/3.2.0/dd/d43/tutorial_py_video_display.html
     /// </summary>
-    public class HololensVideoWriterExample : MonoBehaviour
+    public class CamWriterExample : MonoBehaviour
     {
         /// <summary>
         /// The cube.
@@ -84,6 +85,11 @@ namespace OpenCVForUnitySample
         Texture2D previrwTexture;
 
         /// <summary>
+        /// The preview texture.
+        /// </summary>
+        Texture2D texture;
+
+        /// <summary>
         /// Indicates whether videowriter is recording.
         /// </summary>
         bool isRecording;
@@ -98,40 +104,157 @@ namespace OpenCVForUnitySample
         /// </summary>
         string savePath;
 
+        //27n added to webcam
+        /// <summary>
+        /// The webcam texture to mat helper.
+        /// </summary>
+        public WebCamTextureToMatHelper webCamTextureToMatHelper;
+
+        /// <summary>
+        /// The gray mat.
+        /// </summary>
+        Mat grayMat;
+
+
         // Use this for initialization
         void Start ()
         {
             PlayButton.interactable = false;
             previewPanel.gameObject.SetActive (false);
 
-            Initialize ();
+            //webCamTextureToMatHelper = gameObject.GetComponent<WebCamTextureToMatHelper>();
+
+            Initialize();
+
+
         }
 
         private void Initialize ()
         {
-            Texture2D imgTexture = Resources.Load ("lena") as Texture2D;
 
-            //creates the mat only with the dimensions
-            Mat imgMat = new Mat (imgTexture.height, imgTexture.width, CvType.CV_8UC4);
-
-            //passes the image(the texture) to the mat
-            Utils.texture2DToMat (imgTexture, imgMat);
-
-            //creates the texture with mat image
-            Texture2D texture = new Texture2D (imgMat.cols (), imgMat.rows (), TextureFormat.RGBA32, false);
-
-            Utils.matToTexture2D (imgMat, texture);
-
-            cube.GetComponent<Renderer> ().material.mainTexture = texture;
+#if UNITY_ANDROID && !UNITY_EDITOR
+            // Set the requestedFPS parameter to avoid the problem of the WebCamTexture image becoming low light on some Android devices. (Pixel, pixel 2)
+            // https://forum.unity.com/threads/android-webcamtexture-in-low-light-only-some-models.520656/
+            // https://forum.unity.com/threads/released-opencv-for-unity.277080/page-33#post-3445178
+            rearCameraRequestedFPS = webCamTextureToMatHelper.requestedFPS;
+            if (webCamTextureToMatHelper.requestedIsFrontFacing) {                
+                webCamTextureToMatHelper.requestedFPS = 15;
+                webCamTextureToMatHelper.Initialize ();
+            } else {
+                webCamTextureToMatHelper.Initialize ();
+            }
+#else
+            webCamTextureToMatHelper.Initialize();
+#endif
         }
-        
+
+
+        /// <summary>
+        /// Raises the web cam texture to mat helper initialized event.
+        /// </summary>
+        public void OnWebCamTextureToMatHelperInitialized()
+        {
+            Debug.Log("OnWebCamTextureToMatHelperInitialized2");
+
+            Mat webCamTextureMat = webCamTextureToMatHelper.GetMat();
+
+
+            texture = new Texture2D(webCamTextureMat.cols(), webCamTextureMat.rows(), TextureFormat.RGBA32, false);
+
+            //just for the cube
+            webCamTextureToMatHelper.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
+
+            gameObject.transform.localScale = new Vector3(webCamTextureMat.cols(), webCamTextureMat.rows(), 1);
+
+            Debug.Log("Screen.width " + Screen.width + " Screen.height " + Screen.height + " Screen.orientation " + Screen.orientation);
+
+
+
+
+            //Texture2D imgTexture = Resources.Load("lena") as Texture2D;
+
+            //Mat imgMat = new Mat(imgTexture.height, imgTexture.width, CvType.CV_8UC4); //
+
+            //Utils.texture2DToMat(imgTexture, imgMat);//
+
+            //Texture2D texture = new Texture2D(imgMat.cols(), imgMat.rows(), TextureFormat.RGBA32, false);
+
+
+
+            //Utils.matToTexture2D(imgMat, texture);
+
+            //cube.GetComponent<Renderer>().material.mainTexture = texture;
+
+
+
+
+            //if (fpsMonitor != null)
+            //{
+            //    fpsMonitor.Add("width", webCamTextureMat.width().ToString());
+            //    fpsMonitor.Add("height", webCamTextureMat.height().ToString());
+            //    fpsMonitor.Add("orientation", Screen.orientation.ToString());
+            //}
+
+
+            float width = webCamTextureMat.width();
+            float height = webCamTextureMat.height();
+
+            float widthScale = (float)Screen.width / width;
+            float heightScale = (float)Screen.height / height;
+            if (widthScale < heightScale)
+            {
+                Camera.main.orthographicSize = (width * (float)Screen.height / (float)Screen.width) / 2;
+            }
+            else
+            {
+                Camera.main.orthographicSize = height / 2;
+            }
+
+            grayMat = new Mat(webCamTextureMat.rows(), webCamTextureMat.cols(), CvType.CV_8UC1);
+        }
+
+
+
+        /// <summary>
+        /// Raises the web cam texture to mat helper disposed event.
+        /// </summary>
+        public void OnWebCamTextureToMatHelperDisposed()
+        {
+            Debug.Log("OnWebCamTextureToMatHelperDisposed");
+            //ToCheck
+            if (grayMat != null)
+                grayMat.Dispose();
+
+            if (texture != null)
+            {
+                Texture2D.Destroy(texture);
+                texture = null;
+            }
+        }
+
+
+        /// <summary>
+        /// Raises the web cam texture to mat helper error occurred event.
+        /// </summary>
+        /// <param name="errorCode">Error code.</param>
+        public void OnWebCamTextureToMatHelperErrorOccurred(WebCamTextureToMatHelper.ErrorCode errorCode)
+        {
+            Debug.Log("OnWebCamTextureToMatHelperErrorOccurred " + errorCode);
+        }
+
         // Update is called once per frame
         void Update ()
         {
             if (!isPlaying) {
-                cube.transform.Rotate (new Vector3 (90, 90, 0) * Time.deltaTime, Space.Self);
+                 cube.transform.Rotate (new Vector3 (90, 90, 0) * Time.deltaTime, Space.Self);
+
+                Mat rgbaMat = webCamTextureToMatHelper.GetMat();
+
+                Utils.matToTexture2D(rgbaMat, texture, webCamTextureToMatHelper.GetBufferColors());
+
             }
 
+            
             if (isPlaying) {
                 //Loop play
                 if (capture.get (Videoio.CAP_PROP_POS_FRAMES) >= capture.get (Videoio.CAP_PROP_FRAME_COUNT))
@@ -160,6 +283,7 @@ namespace OpenCVForUnitySample
                 frameCount++;
 
                 // Take screen shot.
+                //deberia ser ahi, no?
                 screenCapture.ReadPixels (new UnityEngine.Rect (0, 0, Screen.width, Screen.height), 0, 0);
                 screenCapture.Apply ();
 
@@ -303,7 +427,7 @@ namespace OpenCVForUnitySample
                 previewPanel.gameObject.SetActive (false);
             } else {
                 RecButton.GetComponentInChildren<UnityEngine.UI.Text> ().color = Color.red;
-                StartRecording (Application.persistentDataPath + "/VideoWriterExample_output.avi");
+                StartRecording (Application.persistentDataPath + "/"+ System.DateTime.Now.ToString("yyyyMMdd_HHmmss")+".avi");
                 PlayButton.interactable = false;
             }
         }
