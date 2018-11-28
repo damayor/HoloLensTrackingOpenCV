@@ -94,7 +94,7 @@ namespace HoloLensWithOpenCVForUnityExample
 
         public float widthBox = 100f;
 
-        Vector3 carPosition;
+        Vector3 box3DPosition;
 
         Camera cameraInstance;
 
@@ -277,23 +277,29 @@ namespace HoloLensWithOpenCVForUnityExample
             //Debug.Log("Entré al onframeaquired desde el tracker");
 
             //26n Debug.Log("si hay puntos " + p1.x.ToString("0.00") + ";" + p1.y.ToString("0.00")); //yep 
-                                                                                               //textDebug.text = "p2:"+p2.x +","+ p2.y;  //nunca maaaas mesh.text en un upate del HL
-            Imgproc.circle(bgraMat, p1, 6, new Scalar(255, 0, 0, 255), 2);
+            //textDebug.text = "p2:"+p2.x +","+ p2.y;  //never leave a textMesh inside a Hololen's Update
 
-            Imgproc.circle(bgraMat, p2, 6, new Scalar(0, 255, 0, 255), 2);
+            if (p1 != null && p2 != null) {
 
+                Imgproc.circle(bgraMat, p1, 5, new Scalar(255, 0, 0, 255), 2);
+
+                Imgproc.circle(bgraMat, p2, 5, new Scalar(0, 255, 0, 255), 2);
+
+            }
+           
             //Imgproc.rectangle(bgraMat, p1, p2, new Scalar(255, 255, 255, 255), 2, 1, 0);
-
-            //Vector3 point = cameraInstance.ScreenToWorldPoint(new Vector3(bgraMat.width() * 2 / 3, bgraMat.height() * 2 / 3, cameraInstance.nearClipPlane));
-            //ray = cameraInstance.ScreenPointToRay(new Vector3(point.x, point.y, 0)); //28n 
 
 
             if (storedTouchPoint != null) //osea si el tipo es allguien
             {
-                selectedPointList.Add(storedTouchPoint);
+                //28n selectedPointList.Add(storedTouchPoint);
 
                 p1 = new Point(storedTouchPoint.x - 50, storedTouchPoint.y - 50);
                 p2 = new Point(storedTouchPoint.x + 50, storedTouchPoint.y + 50);
+                //#ToDo crete the ROI with two taps like MonoTrackingExample.cs
+
+                selectedPointList.Add(p1);
+
                 selectedPointList.Add(p2);
 
                 //Imgproc.circle(bgraMat, p2, 6, new Scalar(0, 0, 0, 255), 2);
@@ -341,19 +347,19 @@ namespace HoloLensWithOpenCVForUnityExample
 
                     previousBox = new Rect2d(bbox.x, bbox.y, bbox.width, bbox.height);
 
-                    // ------ 3D LOCATION
-                    //26n esa caja conviertamela a 3D, donde pegue con algo fisico
-                    //26n carPosition = ScreenToWorldCords(new Point((float)(bbox.x /*+ bbox.width/2*/), (float)(bbox.y /*+ bbox.height / 2*/))); //ToDo find the intersection of two rays
+                    // ------ 3D LOCATION ----------- #Todo
 
-                    ray = cameraInstance.ScreenPointToRay(new Vector3((float)(bbox.x + bbox.width/2), (float)(bbox.y + bbox.height/2), 0)); //28n is like a task, take long time to response, then keep going with others
-                    Debug.Log("dime que no te trabas ahi porfa" + ray.ToString("F2"));
+                    //28n is like a task, take long time to response, then keep going with others
+                    //ray = cameraInstance.ScreenPointToRay(new Vector3((float)(bbox.x + bbox.width/2), (float)(bbox.y + bbox.height/2), 0)); 
+                    //Debug.Log("dime que no te trabas ahi porfa" + ray.ToString("F2"));
 
 
                     //if (Physics.Raycast(ray, out hit))
                     //{
-                    //    print("I'm looking at " + carPosition);
-                    //    carPosition = hit.transform.position;
-                    //    Debug.Log("the car is in" + carPosition);
+
+                    //    box3DPosition = hit.transform.position;
+                    //    print("I'm looking at " + box3DPosition);
+                    //    Debug.Log("the box is in" + box3DPosition);
                     //}
                     //else
                     //    print("I'm looking at nothing!");
@@ -474,7 +480,7 @@ namespace HoloLensWithOpenCVForUnityExample
                         if (Physics.Raycast(ray, out hit))
                         {
                             print("I'm looking at " + hit.transform.position);
-                            carPosition = hit.transform.position;
+                            box3DPosition = hit.transform.position;
                             // Debug.Log("the car is in" + carPosition);
                         }
                         else
@@ -613,7 +619,7 @@ namespace HoloLensWithOpenCVForUnityExample
         /// </summary>
         public void OnBackButtonClick()
         {
-            LoadScene("HoloLensWithOpenCVForUnityExample");
+            LoadScene("HoloLensTrackingProject");
         }
 
         /// <summary>
@@ -817,7 +823,7 @@ namespace HoloLensWithOpenCVForUnityExample
             Debug.Log("Tap in room" + tapInRoom.ToString("0.00f"));
             storedTouchPoint = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), tapInRoom, webCamTextureToMatHelper.GetMat());//19N
                                                                                                                                                                               
-            textMesh.text = storedTouchPoint.x + ";" + storedTouchPoint.y;
+            textMesh.text = "Canvas pos"  + storedTouchPoint.x.ToString("F2") + ";" + storedTouchPoint.y.ToString("F2") ;
 
 
             Debug.Log("punto en el canvas tap");

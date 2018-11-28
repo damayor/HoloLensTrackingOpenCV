@@ -1,0 +1,968 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>DESKTOP-TN601BA</Machine>
+    <WindowsUser>HoloLens</WindowsUser>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetOsVersion>10.0</TargetOsVersion>
+    <TargetOsDescription>Windows 10.0</TargetOsDescription>
+    <SolutionConfiguration>Release|x86</SolutionConfiguration>
+    <PackageArchitecture>x86</PackageArchitecture>
+    <PackageIdentityName>ea63ba4b-5eb1-48fd-9e6c-0d9b6142d641</PackageIdentityName>
+    <PackageIdentityPublisher>CN=DefaultCompany</PackageIdentityPublisher>
+    <IntermediateOutputPath>C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\obj\x86\Release\</IntermediateOutputPath>
+    <RemoteDeploymentType></RemoteDeploymentType>
+    <PackageRegistrationPath></PackageRegistrationPath>
+    <RemoveNonLayoutFiles>true</RemoveNonLayoutFiles>
+    <DeployOptionalPackages>false</DeployOptionalPackages>
+    <WindowsSdkPath>C:\Program Files %28x86%29\Windows Kits\10\</WindowsSdkPath>
+    <LayoutDir>C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\bin\x86\Release\AppX</LayoutDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\bin\x86\Release\Core\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\bin\x86\Release\HoloLensWithOpenCVForUnityExample.exe">
+      <PackagePath>entrypoint\HoloLensWithOpenCVForUnityExample.exe</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.applicationinsights\1.0.0\lib\portable-win81+wpa81\Microsoft.ApplicationInsights.dll">
+      <PackagePath>Microsoft.ApplicationInsights.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.applicationinsights.persistencechannel\1.0.0\lib\portable-win81+wpa81\Microsoft.ApplicationInsights.PersistenceChannel.dll">
+      <PackagePath>Microsoft.ApplicationInsights.PersistenceChannel.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.applicationinsights.windowsapps\1.0.0\lib\win81\Microsoft.ApplicationInsights.Extensibility.Windows.dll">
+      <PackagePath>Microsoft.ApplicationInsights.Extensibility.Windows.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.csharp\4.0.0\lib\netcore50\Microsoft.CSharp.dll">
+      <PackagePath>Microsoft.CSharp.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.ComponentModel.DataAnnotations.dll">
+      <PackagePath>System.ComponentModel.DataAnnotations.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.Core.dll">
+      <PackagePath>System.Core.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.Net.dll">
+      <PackagePath>System.Net.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.Numerics.dll">
+      <PackagePath>System.Numerics.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.Runtime.Serialization.dll">
+      <PackagePath>System.Runtime.Serialization.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.ServiceModel.Web.dll">
+      <PackagePath>System.ServiceModel.Web.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.ServiceModel.dll">
+      <PackagePath>System.ServiceModel.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.Windows.dll">
+      <PackagePath>System.Windows.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.Xml.Linq.dll">
+      <PackagePath>System.Xml.Linq.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.Xml.Serialization.dll">
+      <PackagePath>System.Xml.Serialization.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.Xml.dll">
+      <PackagePath>System.Xml.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.netcore.portable.compatibility\1.0.0\lib\netcore50\System.dll">
+      <PackagePath>System.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.visualbasic\10.0.0\lib\netcore50\Microsoft.VisualBasic.dll">
+      <PackagePath>Microsoft.VisualBasic.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\microsoft.win32.primitives\4.0.0\lib\dotnet\Microsoft.Win32.Primitives.dll">
+      <PackagePath>Microsoft.Win32.Primitives.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.appcontext\4.0.0\lib\netcore50\System.AppContext.dll">
+      <PackagePath>System.AppContext.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.collections\4.0.10\lib\netcore50\System.Collections.dll">
+      <PackagePath>System.Collections.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.collections.concurrent\4.0.10\lib\dotnet\System.Collections.Concurrent.dll">
+      <PackagePath>System.Collections.Concurrent.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.collections.immutable\1.1.37\lib\dotnet\System.Collections.Immutable.dll">
+      <PackagePath>System.Collections.Immutable.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.collections.nongeneric\4.0.0\lib\dotnet\System.Collections.NonGeneric.dll">
+      <PackagePath>System.Collections.NonGeneric.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.collections.specialized\4.0.0\lib\dotnet\System.Collections.Specialized.dll">
+      <PackagePath>System.Collections.Specialized.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.componentmodel\4.0.0\lib\netcore50\System.ComponentModel.dll">
+      <PackagePath>System.ComponentModel.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.componentmodel.annotations\4.0.10\lib\dotnet\System.ComponentModel.Annotations.dll">
+      <PackagePath>System.ComponentModel.Annotations.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.componentmodel.eventbasedasync\4.0.10\lib\dotnet\System.ComponentModel.EventBasedAsync.dll">
+      <PackagePath>System.ComponentModel.EventBasedAsync.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.data.common\4.0.0\lib\dotnet\System.Data.Common.dll">
+      <PackagePath>System.Data.Common.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.diagnostics.contracts\4.0.0\lib\netcore50\System.Diagnostics.Contracts.dll">
+      <PackagePath>System.Diagnostics.Contracts.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.diagnostics.debug\4.0.10\lib\netcore50\System.Diagnostics.Debug.dll">
+      <PackagePath>System.Diagnostics.Debug.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.diagnostics.stacktrace\4.0.0\lib\netcore50\System.Diagnostics.StackTrace.dll">
+      <PackagePath>System.Diagnostics.StackTrace.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.diagnostics.tools\4.0.0\lib\netcore50\System.Diagnostics.Tools.dll">
+      <PackagePath>System.Diagnostics.Tools.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.diagnostics.tracing\4.0.20\lib\netcore50\System.Diagnostics.Tracing.dll">
+      <PackagePath>System.Diagnostics.Tracing.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.dynamic.runtime\4.0.10\lib\netcore50\System.Dynamic.Runtime.dll">
+      <PackagePath>System.Dynamic.Runtime.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.globalization\4.0.10\lib\netcore50\System.Globalization.dll">
+      <PackagePath>System.Globalization.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.globalization.calendars\4.0.0\lib\netcore50\System.Globalization.Calendars.dll">
+      <PackagePath>System.Globalization.Calendars.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.globalization.extensions\4.0.0\lib\dotnet\System.Globalization.Extensions.dll">
+      <PackagePath>System.Globalization.Extensions.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.io\4.0.10\lib\netcore50\System.IO.dll">
+      <PackagePath>System.IO.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.io.compression\4.0.0\lib\netcore50\System.IO.Compression.dll">
+      <PackagePath>System.IO.Compression.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.io.compression.clrcompression-x86\4.0.0\runtimes\win10-x86\native\ClrCompression.dll">
+      <PackagePath>ClrCompression.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.io.compression.zipfile\4.0.0\lib\dotnet\System.IO.Compression.ZipFile.dll">
+      <PackagePath>System.IO.Compression.ZipFile.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.io.filesystem\4.0.0\lib\netcore50\System.IO.FileSystem.dll">
+      <PackagePath>System.IO.FileSystem.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.io.filesystem.primitives\4.0.0\lib\dotnet\System.IO.FileSystem.Primitives.dll">
+      <PackagePath>System.IO.FileSystem.Primitives.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.io.isolatedstorage\4.0.0\lib\netcore50\System.IO.IsolatedStorage.dll">
+      <PackagePath>System.IO.IsolatedStorage.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.io.unmanagedmemorystream\4.0.0\lib\dotnet\System.IO.UnmanagedMemoryStream.dll">
+      <PackagePath>System.IO.UnmanagedMemoryStream.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.linq\4.0.0\lib\netcore50\System.Linq.dll">
+      <PackagePath>System.Linq.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.linq.expressions\4.0.10\lib\netcore50\System.Linq.Expressions.dll">
+      <PackagePath>System.Linq.Expressions.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.linq.parallel\4.0.0\lib\netcore50\System.Linq.Parallel.dll">
+      <PackagePath>System.Linq.Parallel.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.linq.queryable\4.0.0\lib\netcore50\System.Linq.Queryable.dll">
+      <PackagePath>System.Linq.Queryable.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.net.http\4.0.0\lib\netcore50\System.Net.Http.dll">
+      <PackagePath>System.Net.Http.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.net.http.rtc\4.0.0\lib\netcore50\System.Net.Http.Rtc.dll">
+      <PackagePath>System.Net.Http.Rtc.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.net.networkinformation\4.0.0\lib\netcore50\System.Net.NetworkInformation.dll">
+      <PackagePath>System.Net.NetworkInformation.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.net.primitives\4.0.10\lib\netcore50\System.Net.Primitives.dll">
+      <PackagePath>System.Net.Primitives.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.net.requests\4.0.10\lib\dotnet\System.Net.Requests.dll">
+      <PackagePath>System.Net.Requests.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.net.sockets\4.0.0\lib\netcore50\System.Net.Sockets.dll">
+      <PackagePath>System.Net.Sockets.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.net.webheadercollection\4.0.0\lib\dotnet\System.Net.WebHeaderCollection.dll">
+      <PackagePath>System.Net.WebHeaderCollection.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.numerics.vectors\4.1.0\lib\dotnet\System.Numerics.Vectors.dll">
+      <PackagePath>System.Numerics.Vectors.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.numerics.vectors.windowsruntime\4.0.0\lib\dotnet\System.Numerics.Vectors.WindowsRuntime.dll">
+      <PackagePath>System.Numerics.Vectors.WindowsRuntime.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.objectmodel\4.0.10\lib\dotnet\System.ObjectModel.dll">
+      <PackagePath>System.ObjectModel.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.private.datacontractserialization\4.0.0\lib\netcore50\System.Private.DataContractSerialization.dll">
+      <PackagePath>System.Private.DataContractSerialization.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.private.networking\4.0.0\lib\netcore50\System.Private.Networking.dll">
+      <PackagePath>System.Private.Networking.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.private.servicemodel\4.0.0\lib\netcore50\System.Private.ServiceModel.dll">
+      <PackagePath>System.Private.ServiceModel.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.private.uri\4.0.0\lib\netcore50\System.Private.Uri.dll">
+      <PackagePath>System.Private.Uri.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.reflection\4.0.10\lib\netcore50\System.Reflection.dll">
+      <PackagePath>System.Reflection.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.reflection.context\4.0.0\lib\netcore50\System.Reflection.Context.dll">
+      <PackagePath>System.Reflection.Context.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.reflection.dispatchproxy\4.0.0\lib\netcore50\System.Reflection.DispatchProxy.dll">
+      <PackagePath>System.Reflection.DispatchProxy.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.reflection.emit\4.0.0\lib\netcore50\System.Reflection.Emit.dll">
+      <PackagePath>System.Reflection.Emit.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.reflection.emit.ilgeneration\4.0.0\lib\netcore50\System.Reflection.Emit.ILGeneration.dll">
+      <PackagePath>System.Reflection.Emit.ILGeneration.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.reflection.emit.lightweight\4.0.0\lib\netcore50\System.Reflection.Emit.Lightweight.dll">
+      <PackagePath>System.Reflection.Emit.Lightweight.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.reflection.extensions\4.0.0\lib\netcore50\System.Reflection.Extensions.dll">
+      <PackagePath>System.Reflection.Extensions.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.reflection.metadata\1.0.22\lib\dotnet\System.Reflection.Metadata.dll">
+      <PackagePath>System.Reflection.Metadata.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.reflection.primitives\4.0.0\lib\netcore50\System.Reflection.Primitives.dll">
+      <PackagePath>System.Reflection.Primitives.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.reflection.typeextensions\4.0.0\lib\netcore50\System.Reflection.TypeExtensions.dll">
+      <PackagePath>System.Reflection.TypeExtensions.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.resources.resourcemanager\4.0.0\lib\netcore50\System.Resources.ResourceManager.dll">
+      <PackagePath>System.Resources.ResourceManager.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime\4.0.20\lib\netcore50\System.Runtime.dll">
+      <PackagePath>System.Runtime.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime.extensions\4.0.10\lib\netcore50\System.Runtime.Extensions.dll">
+      <PackagePath>System.Runtime.Extensions.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime.handles\4.0.0\lib\netcore50\System.Runtime.Handles.dll">
+      <PackagePath>System.Runtime.Handles.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime.interopservices\4.0.20\lib\netcore50\System.Runtime.InteropServices.dll">
+      <PackagePath>System.Runtime.InteropServices.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime.interopservices.windowsruntime\4.0.0\lib\netcore50\System.Runtime.InteropServices.WindowsRuntime.dll">
+      <PackagePath>System.Runtime.InteropServices.WindowsRuntime.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime.numerics\4.0.0\lib\netcore50\System.Runtime.Numerics.dll">
+      <PackagePath>System.Runtime.Numerics.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime.serialization.json\4.0.0\lib\netcore50\System.Runtime.Serialization.Json.dll">
+      <PackagePath>System.Runtime.Serialization.Json.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime.serialization.primitives\4.0.10\lib\dotnet\System.Runtime.Serialization.Primitives.dll">
+      <PackagePath>System.Runtime.Serialization.Primitives.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime.serialization.xml\4.0.10\lib\netcore50\System.Runtime.Serialization.Xml.dll">
+      <PackagePath>System.Runtime.Serialization.Xml.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime.windowsruntime\4.0.10\lib\netcore50\System.Runtime.WindowsRuntime.dll">
+      <PackagePath>System.Runtime.WindowsRuntime.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.runtime.windowsruntime.ui.xaml\4.0.0\lib\netcore50\System.Runtime.WindowsRuntime.UI.Xaml.dll">
+      <PackagePath>System.Runtime.WindowsRuntime.UI.Xaml.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.security.claims\4.0.0\lib\dotnet\System.Security.Claims.dll">
+      <PackagePath>System.Security.Claims.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.security.principal\4.0.0\lib\netcore50\System.Security.Principal.dll">
+      <PackagePath>System.Security.Principal.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.servicemodel.duplex\4.0.0\lib\netcore50\System.ServiceModel.Duplex.dll">
+      <PackagePath>System.ServiceModel.Duplex.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.servicemodel.http\4.0.10\lib\netcore50\System.ServiceModel.Http.dll">
+      <PackagePath>System.ServiceModel.Http.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.servicemodel.nettcp\4.0.0\lib\netcore50\System.ServiceModel.NetTcp.dll">
+      <PackagePath>System.ServiceModel.NetTcp.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.servicemodel.primitives\4.0.0\lib\netcore50\System.ServiceModel.Primitives.dll">
+      <PackagePath>System.ServiceModel.Primitives.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.servicemodel.security\4.0.0\lib\netcore50\System.ServiceModel.Security.dll">
+      <PackagePath>System.ServiceModel.Security.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.text.encoding\4.0.10\lib\netcore50\System.Text.Encoding.dll">
+      <PackagePath>System.Text.Encoding.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.text.encoding.codepages\4.0.0\lib\dotnet\System.Text.Encoding.CodePages.dll">
+      <PackagePath>System.Text.Encoding.CodePages.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.text.encoding.extensions\4.0.10\lib\netcore50\System.Text.Encoding.Extensions.dll">
+      <PackagePath>System.Text.Encoding.Extensions.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.text.regularexpressions\4.0.10\lib\dotnet\System.Text.RegularExpressions.dll">
+      <PackagePath>System.Text.RegularExpressions.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.threading\4.0.10\lib\netcore50\System.Threading.dll">
+      <PackagePath>System.Threading.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.threading.overlapped\4.0.0\lib\netcore50\System.Threading.Overlapped.dll">
+      <PackagePath>System.Threading.Overlapped.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.threading.tasks\4.0.10\lib\netcore50\System.Threading.Tasks.dll">
+      <PackagePath>System.Threading.Tasks.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.threading.tasks.dataflow\4.5.25\lib\dotnet\System.Threading.Tasks.Dataflow.dll">
+      <PackagePath>System.Threading.Tasks.Dataflow.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.threading.tasks.parallel\4.0.0\lib\netcore50\System.Threading.Tasks.Parallel.dll">
+      <PackagePath>System.Threading.Tasks.Parallel.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.threading.timer\4.0.0\lib\netcore50\System.Threading.Timer.dll">
+      <PackagePath>System.Threading.Timer.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.xml.readerwriter\4.0.10\lib\dotnet\System.Xml.ReaderWriter.dll">
+      <PackagePath>System.Xml.ReaderWriter.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.xml.xdocument\4.0.10\lib\dotnet\System.Xml.XDocument.dll">
+      <PackagePath>System.Xml.XDocument.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.xml.xmldocument\4.0.0\lib\dotnet\System.Xml.XmlDocument.dll">
+      <PackagePath>System.Xml.XmlDocument.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\.nuget\packages\system.xml.xmlserializer\4.0.10\lib\netcore50\System.Xml.XmlSerializer.dll">
+      <PackagePath>System.Xml.XmlSerializer.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Unprocessed\HoloLensCameraStream.dll">
+      <PackagePath>HoloLensCameraStream.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files\Unity\Hub\Editor\2017.2.3f1\Editor\Data\PlaybackEngines\MetroSupport\Players\UAP\dotnet\x86\Release\UnityEngineProxy.dll">
+      <PackagePath>UnityEngineProxy.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Unprocessed\WinRTLegacy.dll">
+      <PackagePath>WinRTLegacy.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files\Unity\Hub\Editor\2017.2.3f1\Editor\Data\PlaybackEngines\MetroSupport\Players\UAP\dotnet\x86\Release\UnityPlayer.dll">
+      <PackagePath>UnityPlayer.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files\Unity\Hub\Editor\2017.2.3f1\Editor\Data\PlaybackEngines\MetroSupport\Players\UAP\dotnet\x86\Release\BridgeInterface.dll">
+      <PackagePath>BridgeInterface.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files\Unity\Hub\Editor\2017.2.3f1\Editor\Data\PlaybackEngines\MetroSupport\Players\UAP\dotnet\x86\Release\UnityEngineDelegates.dll">
+      <PackagePath>UnityEngineDelegates.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files\Unity\Hub\Editor\2017.2.3f1\Editor\Data\PlaybackEngines\MetroSupport\Players\UAP\dotnet\x86\Release\BridgeInterface.winmd">
+      <PackagePath>BridgeInterface.winmd</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files\Unity\Hub\Editor\2017.2.3f1\Editor\Data\PlaybackEngines\MetroSupport\Players\UAP\dotnet\x86\Release\UnityEngineDelegates.winmd">
+      <PackagePath>UnityEngineDelegates.winmd</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files\Unity\Hub\Editor\2017.2.3f1\Editor\Data\PlaybackEngines\MetroSupport\Players\UAP\dotnet\x86\Release\UnityPlayer.winmd">
+      <PackagePath>UnityPlayer.winmd</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files\Unity\Hub\Editor\2017.2.3f1\Editor\Data\PlaybackEngines\MetroSupport\Players\UAP\dotnet\x86\Release\WinRTBridge.winmd">
+      <PackagePath>WinRTBridge.winmd</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Resource.res">
+      <PackagePath>Resource.res</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Assets\SplashScreen.scale-200.png">
+      <PackagePath>Assets\SplashScreen.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Assets\Square150x150Logo.scale-200.png">
+      <PackagePath>Assets\Square150x150Logo.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Assets\Square44x44Logo.scale-200.png">
+      <PackagePath>Assets\Square44x44Logo.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+      <PackagePath>Assets\Square44x44Logo.targetsize-24_altform-unplated.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Assets\StoreLogo.png">
+      <PackagePath>Assets\StoreLogo.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Assets\Wide310x150Logo.scale-200.png">
+      <PackagePath>Assets\Wide310x150Logo.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Properties\Default.rd.xml">
+      <PackagePath>Properties\Default.rd.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\cars.xml">
+      <PackagePath>Data\StreamingAssets\cars.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\haarcascade_frontalface_alt.xml">
+      <PackagePath>Data\StreamingAssets\haarcascade_frontalface_alt.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\lbpcascade_frontalface.xml">
+      <PackagePath>Data\StreamingAssets\lbpcascade_frontalface.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\text\OCRHMM_transitions_table.xml">
+      <PackagePath>Data\StreamingAssets\text\OCRHMM_transitions_table.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\text\trained_classifierNM1.xml">
+      <PackagePath>Data\StreamingAssets\text\trained_classifierNM1.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\text\trained_classifierNM2.xml">
+      <PackagePath>Data\StreamingAssets\text\trained_classifierNM2.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\text\trained_classifier_erGrouping.xml">
+      <PackagePath>Data\StreamingAssets\text\trained_classifier_erGrouping.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_fuzzy400.dll">
+      <PackagePath>opencv_fuzzy400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencvforunity.dll">
+      <PackagePath>opencvforunity.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_bioinspired400.dll">
+      <PackagePath>opencv_bioinspired400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_xphoto400.dll">
+      <PackagePath>opencv_xphoto400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_bgsegm400.dll">
+      <PackagePath>opencv_bgsegm400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_video400.dll">
+      <PackagePath>opencv_video400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_xfeatures2d400.dll">
+      <PackagePath>opencv_xfeatures2d400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_phase_unwrapping400.dll">
+      <PackagePath>opencv_phase_unwrapping400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\PlaneFinding.dll">
+      <PackagePath>PlaneFinding.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_ml400.dll">
+      <PackagePath>opencv_ml400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_photo400.dll">
+      <PackagePath>opencv_photo400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_videoio400.dll">
+      <PackagePath>opencv_videoio400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_face400.dll">
+      <PackagePath>opencv_face400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_flann400.dll">
+      <PackagePath>opencv_flann400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_ximgproc400.dll">
+      <PackagePath>opencv_ximgproc400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_stitching400.dll">
+      <PackagePath>opencv_stitching400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_structured_light400.dll">
+      <PackagePath>opencv_structured_light400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_objdetect400.dll">
+      <PackagePath>opencv_objdetect400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_highgui400.dll">
+      <PackagePath>opencv_highgui400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_aruco400.dll">
+      <PackagePath>opencv_aruco400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_core400.dll">
+      <PackagePath>opencv_core400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_plot400.dll">
+      <PackagePath>opencv_plot400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\MicStreamSelector.dll">
+      <PackagePath>MicStreamSelector.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_ccalib400.dll">
+      <PackagePath>opencv_ccalib400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_videostab400.dll">
+      <PackagePath>opencv_videostab400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_saliency400.dll">
+      <PackagePath>opencv_saliency400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_features2d400.dll">
+      <PackagePath>opencv_features2d400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\GpuTiming.dll">
+      <PackagePath>GpuTiming.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_calib3d400.dll">
+      <PackagePath>opencv_calib3d400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_optflow400.dll">
+      <PackagePath>opencv_optflow400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\SharingClient.dll">
+      <PackagePath>SharingClient.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_imgproc400.dll">
+      <PackagePath>opencv_imgproc400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_shape400.dll">
+      <PackagePath>opencv_shape400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_reg400.dll">
+      <PackagePath>opencv_reg400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\SpatialUnderstanding.dll">
+      <PackagePath>SpatialUnderstanding.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_tracking400.dll">
+      <PackagePath>opencv_tracking400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_imgcodecs400.dll">
+      <PackagePath>opencv_imgcodecs400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\opencv_img_hash400.dll">
+      <PackagePath>opencv_img_hash400.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\boot.config">
+      <PackagePath>Data\boot.config</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\globalgamemanagers">
+      <PackagePath>Data\globalgamemanagers</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\level0">
+      <PackagePath>Data\level0</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\level1">
+      <PackagePath>Data\level1</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\level2">
+      <PackagePath>Data\level2</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\level3">
+      <PackagePath>Data\level3</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\level4">
+      <PackagePath>Data\level4</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\level5">
+      <PackagePath>Data\level5</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\level6">
+      <PackagePath>Data\level6</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\level7">
+      <PackagePath>Data\level7</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\Resources\unity default resources">
+      <PackagePath>Data\Resources\unity default resources</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\Resources\unity_builtin_extra">
+      <PackagePath>Data\Resources\unity_builtin_extra</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\globalgamemanagers.assets">
+      <PackagePath>Data\globalgamemanagers.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\resources.assets">
+      <PackagePath>Data\resources.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\sharedassets0.assets">
+      <PackagePath>Data\sharedassets0.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\sharedassets1.assets">
+      <PackagePath>Data\sharedassets1.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\sharedassets2.assets">
+      <PackagePath>Data\sharedassets2.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\sharedassets3.assets">
+      <PackagePath>Data\sharedassets3.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\sharedassets4.assets">
+      <PackagePath>Data\sharedassets4.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\sharedassets5.assets">
+      <PackagePath>Data\sharedassets5.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\sharedassets6.assets">
+      <PackagePath>Data\sharedassets6.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\sharedassets7.assets">
+      <PackagePath>Data\sharedassets7.assets</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\managedAssemblies.txt">
+      <PackagePath>Data\managedAssemblies.txt</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\nativePlugins.txt">
+      <PackagePath>Data\nativePlugins.txt</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\imagenet_comp_graph_label_strings.txt">
+      <PackagePath>Data\StreamingAssets\dnn\imagenet_comp_graph_label_strings.txt</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\sharedassets0.assets.resS">
+      <PackagePath>Data\sharedassets0.assets.resS</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\sharedassets6.assets.resS">
+      <PackagePath>Data\sharedassets6.assets.resS</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\1920x1080_avi.avi">
+      <PackagePath>Data\StreamingAssets\1920x1080_avi.avi</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\768x576_mjpeg.mjpeg">
+      <PackagePath>Data\StreamingAssets\768x576_mjpeg.mjpeg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left01.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left01.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left02.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left02.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left03.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left03.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left04.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left04.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left05.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left05.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left06.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left06.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left07.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left07.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left08.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left08.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left09.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left09.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left11.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left11.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left12.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left12.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left13.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left13.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\calibration_images\left14.jpg">
+      <PackagePath>Data\StreamingAssets\calibration_images\left14.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\004545.jpg">
+      <PackagePath>Data\StreamingAssets\dnn\004545.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\person.jpg">
+      <PackagePath>Data\StreamingAssets\dnn\person.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\pca_test1.jpg">
+      <PackagePath>Data\StreamingAssets\pca_test1.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\text\scenetext01.jpg">
+      <PackagePath>Data\StreamingAssets\text\scenetext01.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\text\test_text.jpg">
+      <PackagePath>Data\StreamingAssets\text\test_text.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\coco.names">
+      <PackagePath>Data\StreamingAssets\dnn\coco.names</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\MobileNetSSD_deploy.caffemodel">
+      <PackagePath>Data\StreamingAssets\dnn\MobileNetSSD_deploy.caffemodel</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\MobileNetSSD_deploy.prototxt">
+      <PackagePath>Data\StreamingAssets\dnn\MobileNetSSD_deploy.prototxt</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\setup_dnn_module.pdf">
+      <PackagePath>Data\StreamingAssets\dnn\setup_dnn_module.pdf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\tensorflow_inception_graph.pb">
+      <PackagePath>Data\StreamingAssets\dnn\tensorflow_inception_graph.pb</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\tiny-yolo.cfg">
+      <PackagePath>Data\StreamingAssets\dnn\tiny-yolo.cfg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\yolov3-tiny.cfg">
+      <PackagePath>Data\StreamingAssets\dnn\yolov3-tiny.cfg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\tiny-yolo.weights">
+      <PackagePath>Data\StreamingAssets\dnn\tiny-yolo.weights</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\dnn\yolov3-tiny.weights">
+      <PackagePath>Data\StreamingAssets\dnn\yolov3-tiny.weights</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\facerec\facerec_0.bmp">
+      <PackagePath>Data\StreamingAssets\facerec\facerec_0.bmp</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\facerec\facerec_1.bmp">
+      <PackagePath>Data\StreamingAssets\facerec\facerec_1.bmp</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\facerec\facerec_sample.bmp">
+      <PackagePath>Data\StreamingAssets\facerec\facerec_sample.bmp</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\negroCerca.mp4">
+      <PackagePath>Data\StreamingAssets\negroCerca.mp4</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Data\StreamingAssets\text\OCRHMM_knn_model_data.xml.gz">
+      <PackagePath>Data\StreamingAssets\text\OCRHMM_knn_model_data.xml.gz</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\10.0.17134.0\Windows.winmd">
+      <PackagePath>WinMetadata\Windows.winmd</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\bin\x86\Release\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.TilemapModule.dll">
+      <PackagePath>UnityEngine.TilemapModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.TextRenderingModule.dll">
+      <PackagePath>UnityEngine.TextRenderingModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.TerrainPhysicsModule.dll">
+      <PackagePath>UnityEngine.TerrainPhysicsModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.UIElementsModule.dll">
+      <PackagePath>UnityEngine.UIElementsModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.TerrainModule.dll">
+      <PackagePath>UnityEngine.TerrainModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.ScreenCaptureModule.dll">
+      <PackagePath>UnityEngine.ScreenCaptureModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.PhysicsModule.dll">
+      <PackagePath>UnityEngine.PhysicsModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.Physics2DModule.dll">
+      <PackagePath>UnityEngine.Physics2DModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.StyleSheetsModule.dll">
+      <PackagePath>UnityEngine.StyleSheetsModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.SpriteMaskModule.dll">
+      <PackagePath>UnityEngine.SpriteMaskModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.UIModule.dll">
+      <PackagePath>UnityEngine.UIModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.VRModule.dll">
+      <PackagePath>UnityEngine.VRModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.VideoModule.dll">
+      <PackagePath>UnityEngine.VideoModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.VehiclesModule.dll">
+      <PackagePath>UnityEngine.VehiclesModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.WindModule.dll">
+      <PackagePath>UnityEngine.WindModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.WebModule.dll">
+      <PackagePath>UnityEngine.WebModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.UnityWebRequestWWWModule.dll">
+      <PackagePath>UnityEngine.UnityWebRequestWWWModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.UnityConnectModule.dll">
+      <PackagePath>UnityEngine.UnityConnectModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.UnityAnalyticsModule.dll">
+      <PackagePath>UnityEngine.UnityAnalyticsModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.UNETModule.dll">
+      <PackagePath>UnityEngine.UNETModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.UnityWebRequestTextureModule.dll">
+      <PackagePath>UnityEngine.UnityWebRequestTextureModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.UnityWebRequestModule.dll">
+      <PackagePath>UnityEngine.UnityWebRequestModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.UnityWebRequestAudioModule.dll">
+      <PackagePath>UnityEngine.UnityWebRequestAudioModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.ARModule.dll">
+      <PackagePath>UnityEngine.ARModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.AnimationModule.dll">
+      <PackagePath>UnityEngine.AnimationModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.CoreModule.dll">
+      <PackagePath>UnityEngine.CoreModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.ClothModule.dll">
+      <PackagePath>UnityEngine.ClothModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.AudioModule.dll">
+      <PackagePath>UnityEngine.AudioModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.AIModule.dll">
+      <PackagePath>UnityEngine.AIModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.AccessibilityModule.dll">
+      <PackagePath>UnityEngine.AccessibilityModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.CrashReportingModule.dll">
+      <PackagePath>UnityEngine.CrashReportingModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.JSONSerializeModule.dll">
+      <PackagePath>UnityEngine.JSONSerializeModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.InputModule.dll">
+      <PackagePath>UnityEngine.InputModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.PerformanceReportingModule.dll">
+      <PackagePath>UnityEngine.PerformanceReportingModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.ParticleSystemModule.dll">
+      <PackagePath>UnityEngine.ParticleSystemModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.ParticlesLegacyModule.dll">
+      <PackagePath>UnityEngine.ParticlesLegacyModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.IMGUIModule.dll">
+      <PackagePath>UnityEngine.IMGUIModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.GameCenterModule.dll">
+      <PackagePath>UnityEngine.GameCenterModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.dll">
+      <PackagePath>UnityEngine.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.DirectorModule.dll">
+      <PackagePath>UnityEngine.DirectorModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.ImageConversionModule.dll">
+      <PackagePath>UnityEngine.ImageConversionModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.GridModule.dll">
+      <PackagePath>UnityEngine.GridModule.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Newtonsoft.Json.dll">
+      <PackagePath>Newtonsoft.Json.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.Timeline.dll">
+      <PackagePath>UnityEngine.Timeline.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\nunit.framework.dll">
+      <PackagePath>nunit.framework.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.UI.dll">
+      <PackagePath>UnityEngine.UI.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.SpatialTracking.dll">
+      <PackagePath>UnityEngine.SpatialTracking.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.Analytics.dll">
+      <PackagePath>UnityEngine.Analytics.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.HoloLens.dll">
+      <PackagePath>UnityEngine.HoloLens.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\UnityEngine.Networking.dll">
+      <PackagePath>UnityEngine.Networking.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\GLTFSerializationUWP.dll">
+      <PackagePath>GLTFSerializationUWP.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\Assembly-CSharp.dll">
+      <PackagePath>Assembly-CSharp.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\HoloLens\Desktop\HoloLensWithOpenCVForUnityExample\AppGlobal\HoloLensWithOpenCVForUnityExample\bin\x86\Release\Core\HoloLensWithOpenCVForUnityExample.exe">
+      <PackagePath>HoloLensWithOpenCVForUnityExample.exe</PackagePath>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\">
+      <Name>Microsoft.VCLibs.140.00</Name>
+      <Version>14.0.25426.0</Version>
+      <Architecture>ARM</Architecture>
+      <FrameworkIdentity>Name = Microsoft.VCLibs.140.00, MinVersion = 14.0.25426.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\.\AppX\Retail\ARM\Microsoft.VCLibs.ARM.14.00.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\">
+      <Name>Microsoft.VCLibs.140.00</Name>
+      <Version>14.0.25426.0</Version>
+      <Architecture>x64</Architecture>
+      <FrameworkIdentity>Name = Microsoft.VCLibs.140.00, MinVersion = 14.0.25426.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\.\AppX\Retail\x64\Microsoft.VCLibs.x64.14.00.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\">
+      <Name>Microsoft.VCLibs.140.00</Name>
+      <Version>14.0.25426.0</Version>
+      <Architecture>x86</Architecture>
+      <FrameworkIdentity>Name = Microsoft.VCLibs.140.00, MinVersion = 14.0.25426.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\.\AppX\Retail\x86\Microsoft.VCLibs.x86.14.00.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.NET.CoreRuntime\1.1\">
+      <Name>Microsoft.NET.CoreRuntime.1.1</Name>
+      <Version>1.1.26702.0</Version>
+      <Architecture>ARM</Architecture>
+      <FrameworkIdentity>Name = Microsoft.NET.CoreRuntime.1.1, MinVersion = 1.1.26702.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.NET.CoreRuntime\1.1\.\AppX\ARM\Microsoft.NET.CoreRuntime.1.1.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.NET.CoreRuntime\1.1\">
+      <Name>Microsoft.NET.CoreRuntime.1.1</Name>
+      <Version>1.1.26702.0</Version>
+      <Architecture>x64</Architecture>
+      <FrameworkIdentity>Name = Microsoft.NET.CoreRuntime.1.1, MinVersion = 1.1.26702.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.NET.CoreRuntime\1.1\.\AppX\x64\Microsoft.NET.CoreRuntime.1.1.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.NET.CoreRuntime\1.1\">
+      <Name>Microsoft.NET.CoreRuntime.1.1</Name>
+      <Version>1.1.26702.0</Version>
+      <Architecture>x86</Architecture>
+      <FrameworkIdentity>Name = Microsoft.NET.CoreRuntime.1.1, MinVersion = 1.1.26702.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.NET.CoreRuntime\1.1\.\AppX\x86\Microsoft.NET.CoreRuntime.1.1.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\">
+      <Name>Microsoft.VCLibs.140.00</Name>
+      <Version>14.0.25426.0</Version>
+      <Architecture>ARM</Architecture>
+      <FrameworkIdentity>Name = Microsoft.VCLibs.140.00, MinVersion = 14.0.25426.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\.\AppX\Retail\ARM\Microsoft.VCLibs.ARM.14.00.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\">
+      <Name>Microsoft.VCLibs.140.00</Name>
+      <Version>14.0.25426.0</Version>
+      <Architecture>x64</Architecture>
+      <FrameworkIdentity>Name = Microsoft.VCLibs.140.00, MinVersion = 14.0.25426.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\.\AppX\Retail\x64\Microsoft.VCLibs.x64.14.00.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\">
+      <Name>Microsoft.VCLibs.140.00</Name>
+      <Version>14.0.25426.0</Version>
+      <Architecture>x86</Architecture>
+      <FrameworkIdentity>Name = Microsoft.VCLibs.140.00, MinVersion = 14.0.25426.0, Publisher = %27CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US%27</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\.\AppX\Retail\x86\Microsoft.VCLibs.x86.14.00.appx</AppxLocation>
+      <MoreInfo></MoreInfo>
+    </ResolvedSDKReference>
+  </ItemGroup>
+</Project>

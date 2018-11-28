@@ -48,6 +48,11 @@ namespace HoloLensWithOpenCVForUnityExample
             LoadScene("HoloLensVideoCaptureCV");
         }
 
+        public void OnHoloLensSpatialMappingExample()
+        {
+            LoadScene("SpatialMapping");
+        }
+
         public void OnHoloLensNormalCamExampleButtonClick()
         {
             LoadScene("HoloLensNormalCamExample");

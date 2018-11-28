@@ -53,10 +53,6 @@ namespace HoloLensWithOpenCVForUnityExample
         public float vignetteScale = 1.5f;
 
 
-        // public TextMesh textMesh;
-
-
-
 
         /// <summary>
         /// Atributes from VideoWriter example
@@ -191,13 +187,13 @@ namespace HoloLensWithOpenCVForUnityExample
 
 
             grayMat =  new Mat(webCamTextureMat.rows(), webCamTextureMat.cols(), CvType.CV_8UC1);
-          
-            //
 
-            //HL
-            quad_renderer = gameObject.GetComponent<Renderer> () as Renderer;
-            quad_renderer.sharedMaterial.SetTexture ("_MainTex", texture);
-            quad_renderer.sharedMaterial.SetVector ("_VignetteOffset", new Vector4(clippingOffset.x, clippingOffset.y));
+
+            //
+            // cause if we put from webcamtexture changes position and wedont see UI 
+            quad_renderer = webCamTextureToMatHelper.gameObject.GetComponent<Renderer> () as Renderer;
+            quad_renderer.sharedMaterial.SetTexture("_MainTex", texture);
+            quad_renderer.sharedMaterial.SetVector("_VignetteOffset", new Vector4(clippingOffset.x, clippingOffset.y));
 
             Matrix4x4 projectionMatrix;
 #if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
@@ -281,13 +277,17 @@ namespace HoloLensWithOpenCVForUnityExample
 #if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
         public void OnFrameMatAcquired (Mat bgraMat, Matrix4x4 projectionMatrix, Matrix4x4 cameraToWorldMatrix)
         {
-            Mat bgraMatClipROI = new Mat(bgraMat, processingAreaRect);
 
-            Imgproc.cvtColor (bgraMat /*bgraMatClipROI*/, grayMat, Imgproc.COLOR_BGRA2GRAY);
+            Imgproc.cvtColor(bgraMat /*bgraMatClipROI*/, grayMat, Imgproc.COLOR_BGRA2GRAY);
 
-           //// Here goes the code
+            if (!isPlaying)
+            {
+                //Mat bgraMatClipROI = new Mat(bgraMat, processingAreaRect);
+                cube.transform.Rotate(new Vector3(90, 90, 0) * Time.deltaTime, Space.Self);
 
 
+                
+            }
             //new HL
             UnityEngine.WSA.Application.InvokeOnAppThread(() => {
 
@@ -330,38 +330,31 @@ namespace HoloLensWithOpenCVForUnityExample
 
                     Utils.matToTexture2D(rgbaMat, texture, webCamTextureToMatHelper.GetBufferColors());
 
-                    //se supone que ahi ya funcionaria.. lo intentamos con el holographic?
 
 
                     Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
 
-                    /// -------------------------------
-                    /// Here goes the new code
-                    /// --------------------------------
-
-                    
-                    //sould work here?
 
                     Utils.fastMatToTexture2D(rgbaMat, texture);
+
                 }
 
+                if (isPlaying)
+                {
+                    //Loop play
+                    if (capture.get(Videoio.CAP_PROP_POS_FRAMES) >= capture.get(Videoio.CAP_PROP_FRAME_COUNT))
+                        capture.set(Videoio.CAP_PROP_POS_FRAMES, 0);
 
-                //if (isPlaying)
-                //{
-                //    //Loop play
-                //    if (capture.get(Videoio.CAP_PROP_POS_FRAMES) >= capture.get(Videoio.CAP_PROP_FRAME_COUNT))
-                //        capture.set(Videoio.CAP_PROP_POS_FRAMES, 0);
+                    if (capture.grab())
+                    {
+                        capture.retrieve(previewRgbMat, 0);
 
-                //    if (capture.grab())
-                //    {
-                //        capture.retrieve(previewRgbMat, 0);
+                        Imgproc.rectangle(previewRgbMat, new Point(0, 0), new Point(previewRgbMat.cols(), previewRgbMat.rows()), new Scalar(0, 0, 255), 3);
 
-                //        Imgproc.rectangle(previewRgbMat, new Point(0, 0), new Point(previewRgbMat.cols(), previewRgbMat.rows()), new Scalar(0, 0, 255), 3);
-
-                //        Imgproc.cvtColor(previewRgbMat, previewRgbMat, Imgproc.COLOR_BGR2RGB);
-                //        Utils.fastMatToTexture2D(previewRgbMat, previrwTexture);
-                //    }
-                //}
+                        Imgproc.cvtColor(previewRgbMat, previewRgbMat, Imgproc.COLOR_BGR2RGB);
+                        Utils.fastMatToTexture2D(previewRgbMat, previrwTexture);
+                    }
+                }
             }
 
 
@@ -387,12 +380,12 @@ namespace HoloLensWithOpenCVForUnityExample
 
 
         }
-        #endif
+#endif
 
-        /// <summary>
-        /// Raises the destroy event.
-        /// </summary>
-        void OnDestroy ()
+            /// <summary>
+            /// Raises the destroy event.
+            /// </summary>
+            void OnDestroy ()
         {
             #if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
             webCamTextureToMatHelper.frameMatAcquired -= OnFrameMatAcquired;

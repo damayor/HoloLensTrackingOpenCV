@@ -282,7 +282,7 @@ namespace HoloLensWithOpenCVForUnityExample
         /// </summary>
         public void OnBackButtonClick ()
         {
-            LoadScene ("HoloLensWithOpenCVForUnityExample");
+            LoadScene ("HoloLensTrackingProject");
         }
 /// <summary>
         /// Raises the play button click event.
