@@ -32,29 +32,20 @@ namespace HoloLensWithOpenCVForUnityExample
             LoadScene ("HoloLensComicFilterExample");
         }
         
-        public void OnHoloLensFaceDetectionExampleButtonClick ()
-        {
-            LoadScene ("HoloLensFaceDetectionExample");
-        }
-
-        public void OnHoloLensFaceDetectionOverlayExampleButtonClick ()
-        {
-            LoadScene ("HoloLensFaceDetectionOverlayExample");
-        }
-
-        public void OnHoloLensArUcoExampleButtonClick ()
-        {
-            LoadScene ("HoloLensArUcoExample");
-        }
-
-        public void OnHoloLensArUcoCameraCalibrationExampleButtonClick ()
-        {
-            LoadScene ("HoloLensArUcoCameraCalibrationExample");
-        }
 
         public void OnHoloLensTrackingExampleButtonClick()
         {
             LoadScene("HoloLensTrackerExample");
+        }
+
+        public void OnHoloLensTrackingCSRTButtonClick()
+        {
+            LoadScene("HoloLensCSRTTracker");
+        }
+
+        public void OnHoloLensVideoWriterButtonClick()
+        {
+            LoadScene("HoloLensVideoCaptureCV");
         }
 
         public void OnHoloLensNormalCamExampleButtonClick()
