@@ -510,7 +510,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1816573350}
+      - m_Target: {fileID: 1076083695}
         m_MethodName: OnRecButtonClick
         m_Mode: 1
         m_Arguments:
@@ -980,7 +980,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1816573350}
+      - m_Target: {fileID: 1076083695}
         m_MethodName: OnPlayButtonClick
         m_Mode: 1
         m_Arguments:
@@ -1464,6 +1464,7 @@ GameObject:
   - component: {fileID: 1076083696}
   - component: {fileID: 1076083700}
   - component: {fileID: 1076083701}
+  - component: {fileID: 1076083695}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -1471,6 +1472,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1076083695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1076083694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9085828125ce374fbf43fed66caa7a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cube: {fileID: 1023834780}
+  previewPanel: {fileID: 1808850642}
+  RecButton: {fileID: 248898787}
+  PlayButton: {fileID: 509135362}
+  savePathInputField: {fileID: 1719044015}
 --- !u!23 &1076083696
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1562,7 +1579,7 @@ MonoBehaviour:
   onInitialized:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1816573350}
+      - m_Target: {fileID: 1076083695}
         m_MethodName: OnWebCamTextureToMatHelperInitialized
         m_Mode: 1
         m_Arguments:
@@ -1578,7 +1595,7 @@ MonoBehaviour:
   onDisposed:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1816573350}
+      - m_Target: {fileID: 1076083695}
         m_MethodName: OnWebCamTextureToMatHelperDisposed
         m_Mode: 1
         m_Arguments:
@@ -1594,7 +1611,7 @@ MonoBehaviour:
   onErrorOccurred:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1816573350}
+      - m_Target: {fileID: 1076083695}
         m_MethodName: OnWebCamTextureToMatHelperErrorOccurred
         m_Mode: 0
         m_Arguments:
@@ -2743,15 +2760,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1816573344}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9085828125ce374fbf43fed66caa7a6, type: 3}
+  m_Script: {fileID: 11500000, guid: e0268d0776cedff4b9178b201880369c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cube: {fileID: 1023834780}
-  previewPanel: {fileID: 1808850642}
-  RecButton: {fileID: 248898787}
-  PlayButton: {fileID: 509135362}
-  savePathInputField: {fileID: 1719044015}
-  webCamTextureToMatHelper: {fileID: 1076083700}
+  writer: {fileID: 1076083695}
 --- !u!1 &1961380344
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,7 +2863,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1816573350}
+      - m_Target: {fileID: 1076083695}
         m_MethodName: OnBackButtonClick
         m_Mode: 1
         m_Arguments:

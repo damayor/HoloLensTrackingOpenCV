@@ -108,7 +108,7 @@ namespace OpenCVForUnitySample
         /// <summary>
         /// The webcam texture to mat helper.
         /// </summary>
-        public WebCamTextureToMatHelper webCamTextureToMatHelper;
+        WebCamTextureToMatHelper webCamTextureToMatHelper;
 
         /// <summary>
         /// The gray mat.
@@ -117,19 +117,19 @@ namespace OpenCVForUnitySample
 
 
         // Use this for initialization
-        void Start ()
+        void Start()
         {
             PlayButton.interactable = false;
-            previewPanel.gameObject.SetActive (false);
+            previewPanel.gameObject.SetActive(false);
 
-            //webCamTextureToMatHelper = gameObject.GetComponent<WebCamTextureToMatHelper>();
+            webCamTextureToMatHelper = gameObject.GetComponent<WebCamTextureToMatHelper>();
 
             Initialize();
 
 
         }
 
-        private void Initialize ()
+        private void Initialize()
         {
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -162,7 +162,7 @@ namespace OpenCVForUnitySample
             texture = new Texture2D(webCamTextureMat.cols(), webCamTextureMat.rows(), TextureFormat.RGBA32, false);
 
             //just for the cube
-            webCamTextureToMatHelper.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
+            /*webCamTextureToMatHelper.gameObject.*/GetComponent<Renderer>().material.mainTexture = texture;
 
             gameObject.transform.localScale = new Vector3(webCamTextureMat.cols(), webCamTextureMat.rows(), 1);
 
@@ -243,10 +243,10 @@ namespace OpenCVForUnitySample
         }
 
         // Update is called once per frame
-        void Update ()
+        void Update()
         {
             if (!isPlaying) {
-                 cube.transform.Rotate (new Vector3 (90, 90, 0) * Time.deltaTime, Space.Self);
+                cube.transform.Rotate(new Vector3(90, 90, 0) * Time.deltaTime, Space.Self);
 
                 Mat rgbaMat = webCamTextureToMatHelper.GetMat();
 
@@ -254,29 +254,29 @@ namespace OpenCVForUnitySample
 
             }
 
-            
+
             if (isPlaying) {
                 //Loop play
-                if (capture.get (Videoio.CAP_PROP_POS_FRAMES) >= capture.get (Videoio.CAP_PROP_FRAME_COUNT))
-                    capture.set (Videoio.CAP_PROP_POS_FRAMES, 0);
+                if (capture.get(Videoio.CAP_PROP_POS_FRAMES) >= capture.get(Videoio.CAP_PROP_FRAME_COUNT))
+                    capture.set(Videoio.CAP_PROP_POS_FRAMES, 0);
 
-                if (capture.grab ()) {
-                    capture.retrieve (previewRgbMat, 0);
+                if (capture.grab()) {
+                    capture.retrieve(previewRgbMat, 0);
 
-                    Imgproc.rectangle (previewRgbMat, new Point (0, 0), new Point (previewRgbMat.cols (), previewRgbMat.rows ()), new Scalar (0, 0, 255), 3);
+                    Imgproc.rectangle(previewRgbMat, new Point(0, 0), new Point(previewRgbMat.cols(), previewRgbMat.rows()), new Scalar(0, 0, 255), 3);
 
-                    Imgproc.cvtColor (previewRgbMat, previewRgbMat, Imgproc.COLOR_BGR2RGB);
-                    Utils.fastMatToTexture2D (previewRgbMat, previrwTexture);
+                    Imgproc.cvtColor(previewRgbMat, previewRgbMat, Imgproc.COLOR_BGR2RGB);
+                    Utils.fastMatToTexture2D(previewRgbMat, previrwTexture);
                 }
             }
         }
 
-        void OnPostRender ()
+        void OnPostRender()
         {
             if (isRecording) {
                 if (frameCount >= maxframeCount ||
-                    recordingFrameRgbMat.width () != Screen.width || recordingFrameRgbMat.height () != Screen.height) {
-                    OnRecButtonClick ();
+                    recordingFrameRgbMat.width() != Screen.width || recordingFrameRgbMat.height() != Screen.height) {
+                    OnRecButtonClick();
                     return;
                 }
 
@@ -284,112 +284,112 @@ namespace OpenCVForUnitySample
 
                 // Take screen shot.
                 //deberia ser ahi, no?
-                screenCapture.ReadPixels (new UnityEngine.Rect (0, 0, Screen.width, Screen.height), 0, 0);
-                screenCapture.Apply ();
+                screenCapture.ReadPixels(new UnityEngine.Rect(0, 0, Screen.width, Screen.height), 0, 0);
+                screenCapture.Apply();
 
-                Utils.texture2DToMat (screenCapture, recordingFrameRgbMat);
-                Imgproc.cvtColor (recordingFrameRgbMat, recordingFrameRgbMat, Imgproc.COLOR_RGB2BGR);
+                Utils.texture2DToMat(screenCapture, recordingFrameRgbMat);
+                Imgproc.cvtColor(recordingFrameRgbMat, recordingFrameRgbMat, Imgproc.COLOR_RGB2BGR);
 
-                Imgproc.putText (recordingFrameRgbMat, frameCount.ToString (), new Point (recordingFrameRgbMat.cols () - 70, 30), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar (255, 255, 255), 2, Imgproc.LINE_AA, false);
-                Imgproc.putText (recordingFrameRgbMat, "SavePath:", new Point (5, recordingFrameRgbMat.rows () - 30), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar (0, 0, 255), 2, Imgproc.LINE_AA, false);
-                Imgproc.putText (recordingFrameRgbMat, savePath, new Point (5, recordingFrameRgbMat.rows () - 8), Core.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar (255, 255, 255), 0, Imgproc.LINE_AA, false);
+                Imgproc.putText(recordingFrameRgbMat, frameCount.ToString(), new Point(recordingFrameRgbMat.cols() - 70, 30), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2, Imgproc.LINE_AA, false);
+                Imgproc.putText(recordingFrameRgbMat, "SavePath:", new Point(5, recordingFrameRgbMat.rows() - 30), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(0, 0, 255), 2, Imgproc.LINE_AA, false);
+                Imgproc.putText(recordingFrameRgbMat, savePath, new Point(5, recordingFrameRgbMat.rows() - 8), Core.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 0, Imgproc.LINE_AA, false);
 
-                writer.write (recordingFrameRgbMat);
+                writer.write(recordingFrameRgbMat);
             }
         }
 
-        private void StartRecording (string savePath)
+        private void StartRecording(string savePath)
         {
             if (isRecording || isPlaying)
                 return;
 
             this.savePath = savePath;
 
-            writer = new VideoWriter ();
-            writer.open (savePath, VideoWriter.fourcc ('M', 'J', 'P', 'G'), 30, new OpenCVForUnity.Size (Screen.width, Screen.height));
+            writer = new VideoWriter();
+            writer.open(savePath, VideoWriter.fourcc('M', 'J', 'P', 'G'), 30, new OpenCVForUnity.Size(Screen.width, Screen.height));
 
-            if (!writer.isOpened ()) {
-                Debug.LogError ("writer.isOpened() false");
-                writer.release ();
+            if (!writer.isOpened()) {
+                Debug.LogError("writer.isOpened() false");
+                writer.release();
                 return;
             }
 
-            screenCapture = new Texture2D (Screen.width, Screen.height, TextureFormat.RGB24, false);
-            recordingFrameRgbMat = new Mat (Screen.height, Screen.width, CvType.CV_8UC3);
+            screenCapture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+            recordingFrameRgbMat = new Mat(Screen.height, Screen.width, CvType.CV_8UC3);
             frameCount = 0;
 
             isRecording = true;
         }
 
-        private void StopRecording ()
+        private void StopRecording()
         {
             if (!isRecording || isPlaying)
                 return;
 
             if (writer != null && !writer.IsDisposed)
-                writer.release ();
+                writer.release();
 
             if (recordingFrameRgbMat != null && !recordingFrameRgbMat.IsDisposed)
-                recordingFrameRgbMat.Dispose ();
+                recordingFrameRgbMat.Dispose();
 
             savePathInputField.text = savePath;
 
             isRecording = false;
         }
 
-        private void PlayVideo (string filePath)
+        private void PlayVideo(string filePath)
         {
             if (isPlaying || isRecording)
                 return;
 
-            capture = new VideoCapture ();
-            capture.open (filePath);
+            capture = new VideoCapture();
+            capture.open(filePath);
 
-            if (!capture.isOpened ()) {
-                Debug.LogError ("capture.isOpened() is false. ");
-                capture.release ();
+            if (!capture.isOpened()) {
+                Debug.LogError("capture.isOpened() is false. ");
+                capture.release();
                 return;
             }
 
-            Debug.Log ("CAP_PROP_FORMAT: " + capture.get (Videoio.CAP_PROP_FORMAT));
-            Debug.Log ("CV_CAP_PROP_PREVIEW_FORMAT: " + capture.get (Videoio.CV_CAP_PROP_PREVIEW_FORMAT));
-            Debug.Log ("CAP_PROP_POS_MSEC: " + capture.get (Videoio.CAP_PROP_POS_MSEC));
-            Debug.Log ("CAP_PROP_POS_FRAMES: " + capture.get (Videoio.CAP_PROP_POS_FRAMES));
-            Debug.Log ("CAP_PROP_POS_AVI_RATIO: " + capture.get (Videoio.CAP_PROP_POS_AVI_RATIO));
-            Debug.Log ("CAP_PROP_FRAME_COUNT: " + capture.get (Videoio.CAP_PROP_FRAME_COUNT));
-            Debug.Log ("CAP_PROP_FPS: " + capture.get (Videoio.CAP_PROP_FPS));
-            Debug.Log ("CAP_PROP_FRAME_WIDTH: " + capture.get (Videoio.CAP_PROP_FRAME_WIDTH));
-            Debug.Log ("CAP_PROP_FRAME_HEIGHT: " + capture.get (Videoio.CAP_PROP_FRAME_HEIGHT));
-            double ext = capture.get (Videoio.CAP_PROP_FOURCC);
-            Debug.Log ("CAP_PROP_FOURCC: " + (char)((int)ext & 0XFF) + (char)(((int)ext & 0XFF00) >> 8) + (char)(((int)ext & 0XFF0000) >> 16) + (char)(((int)ext & 0XFF000000) >> 24));
+            Debug.Log("CAP_PROP_FORMAT: " + capture.get(Videoio.CAP_PROP_FORMAT));
+            Debug.Log("CV_CAP_PROP_PREVIEW_FORMAT: " + capture.get(Videoio.CV_CAP_PROP_PREVIEW_FORMAT));
+            Debug.Log("CAP_PROP_POS_MSEC: " + capture.get(Videoio.CAP_PROP_POS_MSEC));
+            Debug.Log("CAP_PROP_POS_FRAMES: " + capture.get(Videoio.CAP_PROP_POS_FRAMES));
+            Debug.Log("CAP_PROP_POS_AVI_RATIO: " + capture.get(Videoio.CAP_PROP_POS_AVI_RATIO));
+            Debug.Log("CAP_PROP_FRAME_COUNT: " + capture.get(Videoio.CAP_PROP_FRAME_COUNT));
+            Debug.Log("CAP_PROP_FPS: " + capture.get(Videoio.CAP_PROP_FPS));
+            Debug.Log("CAP_PROP_FRAME_WIDTH: " + capture.get(Videoio.CAP_PROP_FRAME_WIDTH));
+            Debug.Log("CAP_PROP_FRAME_HEIGHT: " + capture.get(Videoio.CAP_PROP_FRAME_HEIGHT));
+            double ext = capture.get(Videoio.CAP_PROP_FOURCC);
+            Debug.Log("CAP_PROP_FOURCC: " + (char)((int)ext & 0XFF) + (char)(((int)ext & 0XFF00) >> 8) + (char)(((int)ext & 0XFF0000) >> 16) + (char)(((int)ext & 0XFF000000) >> 24));
 
 
-            previewRgbMat = new Mat ();
-            capture.grab ();
+            previewRgbMat = new Mat();
+            capture.grab();
 
-            capture.retrieve (previewRgbMat, 0);
+            capture.retrieve(previewRgbMat, 0);
 
-            int frameWidth = previewRgbMat.cols ();
-            int frameHeight = previewRgbMat.rows ();
-            previrwTexture = new Texture2D (frameWidth, frameHeight, TextureFormat.RGB24, false);
+            int frameWidth = previewRgbMat.cols();
+            int frameHeight = previewRgbMat.rows();
+            previrwTexture = new Texture2D(frameWidth, frameHeight, TextureFormat.RGB24, false);
 
-            capture.set (Videoio.CAP_PROP_POS_FRAMES, 0);
+            capture.set(Videoio.CAP_PROP_POS_FRAMES, 0);
 
             previewPanel.texture = previrwTexture;
 
             isPlaying = true;
         }
 
-        private void StopVideo ()
+        private void StopVideo()
         {
             if (!isPlaying || isRecording)
                 return;
 
             if (capture != null && !capture.IsDisposed)
-                capture.release ();
+                capture.release();
 
             if (previewRgbMat != null && !previewRgbMat.IsDisposed)
-                previewRgbMat.Dispose ();
+                previewRgbMat.Dispose();
 
             isPlaying = false;
         }
@@ -397,37 +397,37 @@ namespace OpenCVForUnitySample
         /// <summary>
         /// Raises the destroy event.
         /// </summary>
-        void OnDestroy ()
+        void OnDestroy()
         {
-            StopRecording ();
-            StopVideo ();
+            StopRecording();
+            StopVideo();
         }
 
         /// <summary>
         /// Raises the back button click event.
         /// </summary>
-        public void OnBackButtonClick ()
+        public void OnBackButtonClick()
         {
-            #if UNITY_5_3 || UNITY_5_3_OR_NEWER
-            SceneManager.LoadScene ("HoloLensTrackingProject");
-            #else
+#if UNITY_5_3 || UNITY_5_3_OR_NEWER
+            SceneManager.LoadScene("HoloLensTrackingProject");
+#else
             Application.LoadLevel ("OpenCVForUnityExample");
-            #endif
+#endif
         }
 
         /// <summary>
         /// Raises the rec button click event.
         /// </summary>
-        public void OnRecButtonClick ()
+        public void OnRecButtonClick()
         {
             if (isRecording) {
-                RecButton.GetComponentInChildren<UnityEngine.UI.Text> ().color = Color.black;
-                StopRecording ();
+                RecButton.GetComponentInChildren<UnityEngine.UI.Text>().color = Color.black;
+                StopRecording();
                 PlayButton.interactable = true;
-                previewPanel.gameObject.SetActive (false);
+                previewPanel.gameObject.SetActive(false);
             } else {
-                RecButton.GetComponentInChildren<UnityEngine.UI.Text> ().color = Color.red;
-                StartRecording (Application.persistentDataPath + "/"+ System.DateTime.Now.ToString("yyyyMMdd_HHmmss")+".avi");
+                RecButton.GetComponentInChildren<UnityEngine.UI.Text>().color = Color.red;
+                StartRecording(Application.persistentDataPath + "/" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".avi");
                 PlayButton.interactable = false;
             }
         }
@@ -435,23 +435,53 @@ namespace OpenCVForUnitySample
         /// <summary>
         /// Raises the play button click event.
         /// </summary>
-        public void OnPlayButtonClick ()
+        public void OnPlayButtonClick()
         {
             if (isPlaying) {
-                StopVideo ();
-                PlayButton.GetComponentInChildren<UnityEngine.UI.Text> ().text = "Play";
+                StopVideo();
+                PlayButton.GetComponentInChildren<UnityEngine.UI.Text>().text = "Play";
                 RecButton.interactable = true;
-                previewPanel.gameObject.SetActive (false);
+                previewPanel.gameObject.SetActive(false);
             } else {
-                if (string.IsNullOrEmpty (savePath))
+                if (string.IsNullOrEmpty(savePath))
                     return;
-                
-                PlayVideo (savePath);
-                PlayButton.GetComponentInChildren<UnityEngine.UI.Text> ().text = "Stop";
+
+                PlayVideo(savePath);
+                PlayButton.GetComponentInChildren<UnityEngine.UI.Text>().text = "Stop";
                 RecButton.interactable = false;
-                previewPanel.gameObject.SetActive (true);
+                previewPanel.gameObject.SetActive(true);
             }
         }
+
+        public void postRenderCalled()
+        {
+            if (isRecording)
+            {
+                if (frameCount >= maxframeCount ||
+                    recordingFrameRgbMat.width() != Screen.width || recordingFrameRgbMat.height() != Screen.height)
+                {
+                    OnRecButtonClick();
+                    return;
+                }
+
+                frameCount++;
+
+                // Take screen shot.
+                //deberia ser ahi, no?
+                screenCapture.ReadPixels(new UnityEngine.Rect(0, 0, Screen.width, Screen.height), 0, 0);
+                screenCapture.Apply();
+
+                Utils.texture2DToMat(screenCapture, recordingFrameRgbMat);
+                Imgproc.cvtColor(recordingFrameRgbMat, recordingFrameRgbMat, Imgproc.COLOR_RGB2BGR);
+
+                Imgproc.putText(recordingFrameRgbMat, frameCount.ToString(), new Point(recordingFrameRgbMat.cols() - 70, 30), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2, Imgproc.LINE_AA, false);
+                Imgproc.putText(recordingFrameRgbMat, "SavePath:", new Point(5, recordingFrameRgbMat.rows() - 30), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(0, 0, 255), 2, Imgproc.LINE_AA, false);
+                Imgproc.putText(recordingFrameRgbMat, savePath, new Point(5, recordingFrameRgbMat.rows() - 8), Core.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 0, Imgproc.LINE_AA, false);
+
+                writer.write(recordingFrameRgbMat);
+            }
+        }
+
 
       
     }

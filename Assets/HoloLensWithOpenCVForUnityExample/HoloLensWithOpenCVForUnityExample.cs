@@ -45,7 +45,7 @@ namespace HoloLensWithOpenCVForUnityExample
 
         public void OnHoloLensVideoWriterButtonClick()
         {
-            LoadScene("HoloLensVideoCaptureCV");
+            LoadScene("HoloLensVideoWriter");
         }
 
         public void OnHoloLensSpatialMappingExample()

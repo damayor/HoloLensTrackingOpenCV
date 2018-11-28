@@ -44,7 +44,7 @@ namespace HoloLensWithOpenCVForUnityExample
         /// <summary>
         /// The web cam texture to mat helper.
         /// </summary>
-        public HololensCameraStreamToMatHelper webCamTextureToMatHelper;
+        HololensCameraStreamToMatHelper webCamTextureToMatHelper;
 
         OpenCVForUnity.Rect processingAreaRect;
 
@@ -147,7 +147,7 @@ namespace HoloLensWithOpenCVForUnityExample
             PlayButton.interactable = false;
             previewPanel.gameObject.SetActive(false);
 
-            //webCamTextureToMatHelper = gameObject.GetComponent<HololensCameraStreamToMatHelper> ();
+            webCamTextureToMatHelper = gameObject.GetComponent<HololensCameraStreamToMatHelper> ();
             #if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
             webCamTextureToMatHelper.frameMatAcquired += OnFrameMatAcquired;
             #endif
@@ -171,11 +171,6 @@ namespace HoloLensWithOpenCVForUnityExample
             texture = new Texture2D (webCamTextureMat.cols (), webCamTextureMat.rows (), TextureFormat.RGBA32, false);
             #endif
 
-
-            //27n
-            webCamTextureToMatHelper.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
-
-
             texture.wrapMode = TextureWrapMode.Clamp;
 
             Debug.Log ("Screen.width " + Screen.width + " Screen.height " + Screen.height + " Screen.orientation " + Screen.orientation);
@@ -191,7 +186,7 @@ namespace HoloLensWithOpenCVForUnityExample
 
             //
             // cause if we put from webcamtexture changes position and wedont see UI 
-            quad_renderer = webCamTextureToMatHelper.gameObject.GetComponent<Renderer> () as Renderer;
+            quad_renderer = gameObject.GetComponent<Renderer> () as Renderer;
             quad_renderer.sharedMaterial.SetTexture("_MainTex", texture);
             quad_renderer.sharedMaterial.SetVector("_VignetteOffset", new Vector4(clippingOffset.x, clippingOffset.y));
 
@@ -200,6 +195,10 @@ namespace HoloLensWithOpenCVForUnityExample
             projectionMatrix = webCamTextureToMatHelper.GetProjectionMatrix ();
             quad_renderer.sharedMaterial.SetMatrix ("_CameraProjectionMatrix", projectionMatrix);
 #else
+
+            //27n
+            /*webCamTextureToMatHelper.gameObject.*/
+            //al parecer esto no se llama GetComponent<Renderer>().material.mainTexture = texture;
 
 
 
@@ -283,11 +282,30 @@ namespace HoloLensWithOpenCVForUnityExample
             if (!isPlaying)
             {
                 //Mat bgraMatClipROI = new Mat(bgraMat, processingAreaRect);
-                cube.transform.Rotate(new Vector3(90, 90, 0) * Time.deltaTime, Space.Self);
+                //cube.transform.Rotate(new Vector3(90, 90, 0) * Time.deltaTime, Space.Self);
 
 
                 
             }
+
+            //28n not proved yet
+            //if (isPlaying)
+            //{
+            //    //Loop play
+            //    if (capture.get(Videoio.CAP_PROP_POS_FRAMES) >= capture.get(Videoio.CAP_PROP_FRAME_COUNT))
+            //        capture.set(Videoio.CAP_PROP_POS_FRAMES, 0);
+
+            //    if (capture.grab())
+            //    {
+            //        capture.retrieve(previewRgbMat, 0);
+
+            //        Imgproc.rectangle(previewRgbMat, new Point(0, 0), new Point(previewRgbMat.cols(), previewRgbMat.rows()), new Scalar(0, 0, 255), 3);
+
+            //        Imgproc.cvtColor(previewRgbMat, previewRgbMat, Imgproc.COLOR_BGR2RGB);
+            //        Utils.fastMatToTexture2D(previewRgbMat, previrwTexture);
+            //    }
+            //}
+
             //new HL
             UnityEngine.WSA.Application.InvokeOnAppThread(() => {
 
@@ -493,31 +511,31 @@ namespace HoloLensWithOpenCVForUnityExample
 
         void OnPostRender()
         {
-            if (isRecording)
-            {
-                if (frameCount >= maxframeCount ||
-                    recordingFrameRgbMat.width() != Screen.width || recordingFrameRgbMat.height() != Screen.height)
-                {
-                    OnRecButtonClick();
-                    return;
-                }
+            //if (isRecording)
+            //{
+            //    if (frameCount >= maxframeCount ||
+            //        recordingFrameRgbMat.width() != Screen.width || recordingFrameRgbMat.height() != Screen.height)
+            //    {
+            //        OnRecButtonClick();
+            //        return;
+            //    }
 
-                frameCount++;
+            //    frameCount++;
 
-                // Take screen shot.
-                //deberia ser ahi, no?
-                screenCapture.ReadPixels(new UnityEngine.Rect(0, 0, Screen.width, Screen.height), 0, 0);
-                screenCapture.Apply();
+            //    // Take screen shot.
+            //    //deberia ser ahi, no?
+            //    screenCapture.ReadPixels(new UnityEngine.Rect(0, 0, Screen.width, Screen.height), 0, 0);
+            //    screenCapture.Apply();
 
-                Utils.texture2DToMat(screenCapture, recordingFrameRgbMat);
-                Imgproc.cvtColor(recordingFrameRgbMat, recordingFrameRgbMat, Imgproc.COLOR_RGB2BGR);
+            //    Utils.texture2DToMat(screenCapture, recordingFrameRgbMat);
+            //    Imgproc.cvtColor(recordingFrameRgbMat, recordingFrameRgbMat, Imgproc.COLOR_RGB2BGR);
 
-                Imgproc.putText(recordingFrameRgbMat, frameCount.ToString(), new Point(recordingFrameRgbMat.cols() - 70, 30), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2, Imgproc.LINE_AA, false);
-                Imgproc.putText(recordingFrameRgbMat, "SavePath:", new Point(5, recordingFrameRgbMat.rows() - 30), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(0, 0, 255), 2, Imgproc.LINE_AA, false);
-                Imgproc.putText(recordingFrameRgbMat, savePath, new Point(5, recordingFrameRgbMat.rows() - 8), Core.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 0, Imgproc.LINE_AA, false);
+            //    //Imgproc.putText(recordingFrameRgbMat, frameCount.ToString(), new Point(recordingFrameRgbMat.cols() - 70, 30), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2, Imgproc.LINE_AA, false);
+            //    //Imgproc.putText(recordingFrameRgbMat, "SavePath:", new Point(5, recordingFrameRgbMat.rows() - 30), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(0, 0, 255), 2, Imgproc.LINE_AA, false);
+            //    //Imgproc.putText(recordingFrameRgbMat, savePath, new Point(5, recordingFrameRgbMat.rows() - 8), Core.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 0, Imgproc.LINE_AA, false);
 
-                writer.write(recordingFrameRgbMat);
-            }
+            //    writer.write(recordingFrameRgbMat);
+            //}
         }
 
         private void StartRecording(string savePath)
@@ -616,6 +634,36 @@ namespace HoloLensWithOpenCVForUnityExample
                 previewRgbMat.Dispose();
 
             isPlaying = false;
+        }
+
+        public void postRenderCalled()
+        {
+
+            if (isRecording)
+            {
+                if (frameCount >= maxframeCount ||
+                    recordingFrameRgbMat.width() != Screen.width || recordingFrameRgbMat.height() != Screen.height)
+                {
+                    OnRecButtonClick();
+                    return;
+                }
+
+                frameCount++;
+
+                // Take screen shot.
+                // is here!
+                screenCapture.ReadPixels(new UnityEngine.Rect(0, 0, Screen.width, Screen.height), 0, 0);
+                screenCapture.Apply();
+
+                Utils.texture2DToMat(screenCapture, recordingFrameRgbMat);
+                Imgproc.cvtColor(recordingFrameRgbMat, recordingFrameRgbMat, Imgproc.COLOR_RGB2BGR);
+
+                Imgproc.putText(recordingFrameRgbMat, frameCount.ToString(), new Point(recordingFrameRgbMat.cols() - 70, 30), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2, Imgproc.LINE_AA, false);
+                Imgproc.putText(recordingFrameRgbMat, "SavePath:", new Point(5, recordingFrameRgbMat.rows() - 30), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(0, 0, 255), 2, Imgproc.LINE_AA, false);
+                Imgproc.putText(recordingFrameRgbMat, savePath, new Point(5, recordingFrameRgbMat.rows() - 8), Core.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 0, Imgproc.LINE_AA, false);
+
+                writer.write(recordingFrameRgbMat);
+            }
         }
 
 

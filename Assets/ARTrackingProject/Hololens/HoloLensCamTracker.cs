@@ -279,13 +279,14 @@ namespace HoloLensWithOpenCVForUnityExample
             //26n Debug.Log("si hay puntos " + p1.x.ToString("0.00") + ";" + p1.y.ToString("0.00")); //yep 
             //textDebug.text = "p2:"+p2.x +","+ p2.y;  //never leave a textMesh inside a Hololen's Update
 
-            if (p1 != null && p2 != null) {
+            //28n pm
+            //if (p1 != null && p2 != null) {
 
-                Imgproc.circle(bgraMat, p1, 5, new Scalar(255, 0, 0, 255), 2);
+            //    Imgproc.circle(bgraMat, p1, 5, new Scalar(255, 0, 0, 255), 2);
 
-                Imgproc.circle(bgraMat, p2, 5, new Scalar(0, 255, 0, 255), 2);
+            //    Imgproc.circle(bgraMat, p2, 5, new Scalar(0, 255, 0, 255), 2);
 
-            }
+            //}
            
             //Imgproc.rectangle(bgraMat, p1, p2, new Scalar(255, 255, 255, 255), 2, 1, 0);
 
@@ -823,7 +824,7 @@ namespace HoloLensWithOpenCVForUnityExample
             Debug.Log("Tap in room" + tapInRoom.ToString("0.00f"));
             storedTouchPoint = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), tapInRoom, webCamTextureToMatHelper.GetMat());//19N
                                                                                                                                                                               
-            textMesh.text = "Canvas pos"  + storedTouchPoint.x.ToString("F2") + ";" + storedTouchPoint.y.ToString("F2") ;
+            //textMesh.text = "Canvas pos: "  + storedTouchPoint.x.ToString("F2") + ";" + storedTouchPoint.y.ToString("F2") ;
 
 
             Debug.Log("punto en el canvas tap");
