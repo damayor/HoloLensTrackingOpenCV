@@ -11,7 +11,7 @@ using UnityEngine.XR.WSA.Input;
 using HoloToolkit.Unity.InputModule;
 using System;
 using System.IO;
-
+using OpenCVForUnityExample;
 
 namespace HoloLensWithOpenCVForUnityExample
 {
@@ -56,6 +56,13 @@ namespace HoloLensWithOpenCVForUnityExample
 
         OpenCVForUnity.Rect processingAreaRect;
 
+        /// <summary>
+        /// The FPS monitor.
+        /// </summary>
+        FpsMonitor fpsMonitor;
+
+
+
         public Vector2 outsideClippingRatio = new Vector2(0.17f, 0.19f);
         public Vector2 clippingOffset = new Vector2(0.043f, -0.025f);
         public float vignetteScale = 1.5f;
@@ -87,8 +94,9 @@ namespace HoloLensWithOpenCVForUnityExample
 
         bool tap;
 
-        public TextMesh textMesh;
-        public TextMesh textDebug;
+        public TextMesh textCanvasCoords;
+
+//        public TextMesh textDebug;
 
         bool trackerInitialized;
 
@@ -98,38 +106,30 @@ namespace HoloLensWithOpenCVForUnityExample
 
         Camera cameraInstance;
 
+        HololensVideoWriterAsPlugin recorder;
+
 
         // Use this for initialization
         protected override void Start()
         {
+            fpsMonitor = GetComponent<FpsMonitor>();
+
             base.Start();
 
             webCamTextureToMatHelper = gameObject.GetComponent<HololensCameraStreamToMatHelper>();
+
             #if NETFX_CORE && !DISABLE_HOLOLENSCAMSTREAM_API
             webCamTextureToMatHelper.frameMatAcquired += OnFrameMatAcquired;
             #endif
             webCamTextureToMatHelper.Initialize();
 
-            cameraInstance = GameObject.FindWithTag("MainCamera").GetComponent<Camera>() ; 
-             
-            vignetteScale = 1.5f; //28n
+            cameraInstance = GameObject.FindWithTag("MainCamera").GetComponent<Camera>() ;
+
+            //29n
+            //recorder = gameObject.GetComponent<HololensVideoWriterAsPlugin>();
 
 
-            //tracker_type = TrackerType.KCF;
-
-            /*
-            if (tracker_type == TrackerType.Boosting)
-                monotracker = TrackerBoosting.create();
-            if (tracker_type == TrackerType.MIL)
-                monotracker = TrackerMIL.create();
-            if (tracker_type == TrackerType.KCF)
-                monotracker = TrackerKCF.create();
-            if (tracker_type == TrackerType.TLD)
-                monotracker = TrackerTLD.create();
-            if (tracker_type == TrackerType.MedianFlow)
-                monotracker = TrackerMedianFlow.create();
-            if (tracker_type == TrackerType.CSRT)
-                monotracker = TrackerCSRT.create();*/
+           
         }
 
         /// <summary>
@@ -424,9 +424,9 @@ namespace HoloLensWithOpenCVForUnityExample
 
                 Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
 
-                Imgproc.circle(rgbaMat, p1, 6, new Scalar(255, 0, 0, 255), 2);
+                //29n Imgproc.circle(rgbaMat, p1, 6, new Scalar(255, 0, 0, 255), 2);
 
-                Imgproc.circle(rgbaMat, p2, 6, new Scalar(0, 255, 0, 255), 2);
+                //Imgproc.circle(rgbaMat, p2, 6, new Scalar(0, 255, 0, 255), 2);
 
                 //Vector3 point = cameraInstance.ScreenToWorldPoint(new Vector3(rgbaMat.width() * 2 / 3, rgbaMat.height() * 2 / 3, cameraInstance.nearClipPlane));
 
@@ -475,7 +475,7 @@ namespace HoloLensWithOpenCVForUnityExample
                         ///26n esa caja conviertamela a 3D, donde pegue con algo fisico
                         ///26n Vector3 carPosition = ScreenToWorldCords(new Point(), bbox);
                         Vector3 point = cameraInstance.ScreenToWorldPoint(new Vector3((float)bbox.x, (float)bbox.y, cameraInstance.nearClipPlane));
-                        ray = cameraInstance.ScreenPointToRay(new Vector3((float)bbox.x, (float) bbox.y, 0)); //28n 
+                        ray = cameraInstance.ScreenPointToRay(new Vector3((float)bbox.x, (float)bbox.y, 0)); //28n 
 
 
                         if (Physics.Raycast(ray, out hit))
@@ -496,6 +496,15 @@ namespace HoloLensWithOpenCVForUnityExample
                             Imgproc.rectangle(rgbaMat, previousBox.tl(), previousBox.br(), new Scalar(255, 0, 0, 255), 2, 1, 0); //8n
                         }
                     }
+
+                    Imgproc.putText(rgbaMat, "Tap again to select a new tracking region.", new Point(5, rgbaMat.rows() - 10), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(255, 255, 255, 255), 2, Imgproc.LINE_AA, false); //29n
+
+                }
+                //29n
+                else
+                {
+                    Imgproc.putText(rgbaMat, "Tap to select the tracking region in the gaze location.", new Point(5, rgbaMat.rows() - 10), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(255, 255, 255, 255), 2, Imgproc.LINE_AA, false);
+
                 }
 
                 //bool updated = trackers.update(rgbaMat, objects);
@@ -505,6 +514,21 @@ namespace HoloLensWithOpenCVForUnityExample
                 //    OnResetTrackerButtonClick();
                 //}
 
+                if (storedTouchPoint != null)
+                {
+                    Imgproc.putText (rgbaMat, "Tap again to select a new tracking region.", new Point (5, rgbaMat.rows () - 10), Core.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar (255, 255, 255, 255), 2, Imgproc.LINE_AA, false);
+                    //if (fpsMonitor != null)
+                    //{
+                    //    fpsMonitor.consoleText = "Touch the screen to select a new tracking region.";
+                    //}
+                }
+                else
+                {
+                    //if (fpsMonitor != null)
+                    //{
+                    //    fpsMonitor.consoleText = "Please select the end point of the new tracking region.";
+                    //}
+                }
 
 
                 Utils.fastMatToTexture2D(rgbaMat, texture);
@@ -823,8 +847,8 @@ namespace HoloLensWithOpenCVForUnityExample
             sphere.transform.position = tapInRoom;
             Debug.Log("Tap in room" + tapInRoom.ToString("0.00f"));
             storedTouchPoint = WorldCoordsToScreen(webCamTextureToMatHelper.GetCameraToWorldMatrix(), webCamTextureToMatHelper.GetProjectionMatrix(), tapInRoom, webCamTextureToMatHelper.GetMat());//19N
-                                                                                                                                                                              
-            //textMesh.text = "Canvas pos: "  + storedTouchPoint.x.ToString("F2") + ";" + storedTouchPoint.y.ToString("F2") ;
+
+            //textCanvasCoords.text = "Canvas pos: "  + storedTouchPoint.x.ToString("F2") + ";" + storedTouchPoint.y.ToString("F2") ;
 
 
             Debug.Log("punto en el canvas tap");

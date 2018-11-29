@@ -1521,6 +1521,7 @@ GameObject:
   - component: {fileID: 1076083696}
   - component: {fileID: 1076083702}
   - component: {fileID: 1076083695}
+  - component: {fileID: 1076083700}
   m_Layer: 0
   m_Name: HoloLensTrackerExample
   m_TagString: Untagged
@@ -1543,7 +1544,7 @@ MonoBehaviour:
   clippingOffset: {x: 0.043, y: -0.025}
   vignetteScale: 0
   tracker_type: 8
-  textMesh: {fileID: 1380099031}
+  textCanvasCoords: {fileID: 0}
   textDebug: {fileID: 336731347}
   widthBox: 100
 --- !u!23 &1076083696
@@ -1614,6 +1615,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1076083700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1076083694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ffc138d8c85b946b9bae82bf2c68c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alignment: 1
+  offset: {x: 10, y: 10}
+  boxVisible: 1
+  boxWidth: 200
+  boxHeight: 110
+  padding: {x: 8, y: 5}
+  consoleHeight: 50
+  consoleText: 
 --- !u!114 &1076083702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2170,7 +2190,7 @@ TextMesh:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1380099029}
-  m_Text: 0
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
