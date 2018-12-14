@@ -13,33 +13,33 @@ To use the project we have supported on:
 
 To develop the project on the Hololens or in the Holographic Emulator we need to: 
 
-	1. Pull this Git repository.
-	2. Add the folders which are in the OpenCVForUnity library and are included on the .gitignore file.
-	3. Import all the Holotoolkit Unity package.
+1. Pull this Git repository.
+2. Add the folders which are in the OpenCVForUnity library and are included on the .gitignore file.
+3. Import all the Holotoolkit Unity package.
 
 
 Capabilities needed on Unity
 
-	* WebCam
-	* Micophone
-	* VideosLibrary
-	* SpatialMapping
+* WebCam
+* Micophone
+* VideosLibrary
+* SpatialMapping
 
 ### Run Holographic emulator
 
-	1. Open the Holographic Remoting Player application on the Hollens.
-	2. Ensure that the ip will be an public ip not a local ip started by 127.0
-	3. Open the Holographic emulator located in Window Menu
-	4. Optional, start Debug on Visual Studio
-	5. Play. The emulation will show 
-	6. Be Careful! For a new emulation is better disconnect an re conect because Unity can fail. 
+1. Open the Holographic Remoting Player application on the Hollens.
+2. Ensure that the ip will be an public ip not a local ip started by 127.0
+3. Open the Holographic emulator located in Window Menu
+4. Optional, start Debug on Visual Studio
+5. Play. The emulation will show 
+6. Be Careful! For a new emulation is better disconnect an re conect because Unity can fail. 
 
 ### Deploy in the Hololens
 
-	1. Build Settings -> Build -> Select a new folder named by your preference
-	2. Open the Visual Studio Solution
-	3. Change Debug and ARM with **Release** and** x86**. Select the **Device ** is it will be conncected by USB or **Reomte Machine** if will be by WiFi.
-	4. Select Start Debugging if you want to bew see the prints console from Unity
+1. Build Settings -> Build -> Select a new folder named by your preference
+2. Open the Visual Studio Solution
+3. Change Debug and ARM with **Release** and** x86**. Select the **Device ** is it will be conncected by USB or **Reomte Machine** if will be by WiFi.
+4. Select Start Debugging if you want to bew see the prints console from Unity
 
 
 ## Unity Project
