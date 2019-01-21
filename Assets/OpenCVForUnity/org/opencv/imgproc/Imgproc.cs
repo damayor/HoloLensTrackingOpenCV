@@ -582,10 +582,17 @@ namespace OpenCVForUnity
             if (src != null) src.ThrowIfDisposed ();
             if (dst != null) dst.ThrowIfDisposed ();
 #if UNITY_PRO_LICENSE || ((UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR) || UNITY_5 || UNITY_5_3_OR_NEWER
-        
-        Mat retVal = new Mat(imgproc_Imgproc_getPerspectiveTransform_10(src.nativeObj, dst.nativeObj));
-        
-        return retVal;
+
+            //211
+            IntPtr srcc = src.nativeObj;
+            IntPtr dstt = dst.nativeObj;
+
+            IntPtr mmat = imgproc_Imgproc_getPerspectiveTransform_10(srcc, dstt);
+
+            //Mat retVal = new Mat(imgproc_Imgproc_getPerspectiveTransform_10(src.nativeObj, dst.nativeObj));
+            Mat retVal = new Mat(mmat);
+
+            return retVal;
 #else
             return null;
 #endif
