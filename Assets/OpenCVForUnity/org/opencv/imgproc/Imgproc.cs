@@ -583,14 +583,8 @@ namespace OpenCVForUnity
             if (dst != null) dst.ThrowIfDisposed ();
 #if UNITY_PRO_LICENSE || ((UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR) || UNITY_5 || UNITY_5_3_OR_NEWER
 
-            //211
-            IntPtr srcc = src.nativeObj;
-            IntPtr dstt = dst.nativeObj;
 
-            IntPtr mmat = imgproc_Imgproc_getPerspectiveTransform_10(srcc, dstt);
-
-            //Mat retVal = new Mat(imgproc_Imgproc_getPerspectiveTransform_10(src.nativeObj, dst.nativeObj));
-            Mat retVal = new Mat(mmat);
+            Mat retVal = new Mat(imgproc_Imgproc_getPerspectiveTransform_11(src.nativeObj, dst.nativeObj));
 
             return retVal;
 #else
@@ -5812,7 +5806,10 @@ RotatedRect retVal = new RotatedRect (tmpArray);
 
         // C++:  Mat cv::getPerspectiveTransform(Mat src, Mat dst)
         [DllImport (LIBNAME)]
-        private static extern IntPtr imgproc_Imgproc_getPerspectiveTransform_10 (IntPtr src_nativeObj, IntPtr dst_nativeObj);
+        private static extern IntPtr imgproc_Imgproc_getPerspectiveTransform_10 (IntPtr src_nativeObj, IntPtr dst_nativeObj, int solveMethod);
+
+        [DllImport(LIBNAME)]
+        private static extern IntPtr imgproc_Imgproc_getPerspectiveTransform_11(IntPtr src_nativeObj, IntPtr dst_nativeObj);
 
         // C++:  Mat cv::getRotationMatrix2D(Point2f center, double angle, double scale)
         [DllImport (LIBNAME)]

@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/HoloLensWithOpenCVForUnityExample/ShowLicense.unity
     guid: ae54b3be70768f64e9b1a300c7cdeff9
   - enabled: 1
-    path: Assets/HoloLensWithOpenCVForUnityExample/HoloLensComicFilterExample/HoloLensComicFilterExample.unity
+    path: Assets/ARTrackingProject/Hololens/HoloLensComicFilterExample.unity
     guid: e1c01ca879ef2ae44b6980a83cc01c75
   - enabled: 1
     path: Assets/ARTrackingProject/Hololens/HoloLensTrackerExample.unity
@@ -23,9 +23,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ARTrackingProject/Hololens/HoloLensNormalCamExample.unity
     guid: 3a72e69dbca0bdc4db08c14826c4b982
-  - enabled: 1
+  - enabled: 0
     path: Assets/ARTrackingProject/Hololens/Utils/HoloLensVideoWriter.unity
     guid: 8d9035938d83f9f42a9a6e2f5378234b
-  - enabled: 1
+  - enabled: 0
     path: Assets/ARTrackingProject/Hololens/Utils/SpatialMapping.unity
     guid: 1293feef9c00149408b2eb2350280faa
