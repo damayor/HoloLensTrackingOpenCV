@@ -334,7 +334,7 @@ namespace OpenCVForUnityExample
                 srcRectMat.put (0, 0, tl.x, tl.y, tr.x, tr.y, br.x, br.y, bl.x, bl.y);
                 dstRectMat.put (0, 0, 0, 0, quadScale.x, 0, quadScale.x, quadScale.y, 0, quadScale.y);            
 
-                using (Mat perspectiveTransform = Imgproc.getPerspectiveTransform (srcRectMat, dstRectMat)) //
+                using (Mat perspectiveTransform = Imgproc.getPerspectiveTransform (srcRectMat, dstRectMat))
                 using (MatOfPoint2f srcPointMat = new MatOfPoint2f (screenPoint))
                 using (MatOfPoint2f dstPointMat = new MatOfPoint2f ()) {
                     Core.perspectiveTransform (srcPointMat, dstPointMat, perspectiveTransform);
