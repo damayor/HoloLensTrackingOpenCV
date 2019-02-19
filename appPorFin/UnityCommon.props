@@ -1,0 +1,9 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <UnityWSASolutionName>HoloLensWithOpenCVForUnityExample</UnityWSASolutionName>
+        <UnityWSASolutionDir>C:\Users\David Mayorga\Documents\GitHub\HoloLensTrackingOpenCV\appPorFin\</UnityWSASolutionDir>
+        <UnityProjectDir>C:\Users\David Mayorga\Documents\GitHub\HoloLensTrackingOpenCV\</UnityProjectDir>
+        <UnityWSAPlayerDir>C:\Program Files\Unity2017\Editor\Data\PlaybackEngines\MetroSupport\</UnityWSAPlayerDir>
+        <UnityWSAToolsDir>$(UnityWSASolutionDir)Unity\Tools\</UnityWSAToolsDir>
+    </PropertyGroup>
+</Project>
