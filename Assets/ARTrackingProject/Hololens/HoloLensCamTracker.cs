@@ -106,8 +106,7 @@ namespace HoloLensWithOpenCVForUnityExample
 
         Camera cameraInstance;
 
-        HololensVideoWriterAsPlugin recorder;
-
+        //HololensVideoWriterAsPlugin recorder;
 
         // Use this for initialization
         protected override void Start()

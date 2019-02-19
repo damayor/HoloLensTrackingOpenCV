@@ -7,13 +7,12 @@
 /[Bb]uilds/
 */HoloToolkit/
 [Ll]ibrary/
-/Assets/OpenCVForUnity/Plugins/
 sysinfo.txt
 *.stackdump
 /Assets/AssetStoreTools*
 /Assets/OpenCVForUnity/Extra/	
-Assets/OpenCVForUnity/Plugins/iOS*
 /Assets/StreamingAssets/
+
 /.vs/
 *.apk
 *.unitypackage
@@ -49,3 +48,9 @@ ehthumbs.db
 [Dd]esktop.ini
 Corridor/Library/ShaderCache/
 Corridor/Library/metadata/
+
+#For debugging
+/Assets/ARTrackingProject/OpenCV/
+
+# Should be Windows and WSA plugins from 2.3.2 version
+/Assets/OpenCVForUnity/Plugins/
