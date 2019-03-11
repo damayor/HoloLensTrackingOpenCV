@@ -67,7 +67,7 @@ Capabilities needed on Unity
 
 * The camera stops, but the UI works: There is something wrong on the OnFrameAquired function. There are some methods can only be called from the main thread.
 "Constructors and field initializers will be executed from the loading thread when loading a scene. Don't use this function in the constructor or field initializers, instead move initialization code to the Awake or Start function."
-* _"DllNotFoundException> opencvforunity"_: The DLL library is not loaded. Ensure the DLL in the **WSA** (not in the Windows) folder was loaded in Unity.
+* _"DllNotFoundException: opencvforunity"_: The DLL library is not loaded. Ensure the DLL in the **WSA** (not in the Windows) folder was loaded in Unity.
 
 * Seeing the webcam image and not the hololens cam: you should build the to se the hololens cameras. If you run from the holographic emulation you will always see the webcam render. Furthermor willl run always the Update function and all the code which is under 
 * Dont see any change after the unity build: Ensure you add the new scene to the Build Settings
