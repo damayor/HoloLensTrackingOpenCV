@@ -7,7 +7,7 @@ To use the project we have supported on:
 * [HoloToolkit-Unity-2017.4.0.0][HoloToolkit]
 * [OpenCV for Unity 2.2.9][OpenCVForUnity]
 * [HoloLensCameraStream][CameraStream]	
-* [HoloLens With OpenCVForUnity Example]{https://github.com/EnoxSoftware/HoloLensWithOpenCVForUnityExample}
+* [HoloLens With OpenCVForUnity Example][HololensOpenCV]
 
 ## Build
 
@@ -38,7 +38,7 @@ Capabilities needed on Unity
 
 1. Build Settings -> Build -> Select a new folder named by your preference
 2. Open the Visual Studio Solution
-3. Change Debug and ARM with **Release** and** x86**. Select the **Device ** is it will be conncected by USB or **Reomte Machine** if will be by WiFi.
+3. Change Debug and ARM with **Release** and **x86**. Select the **Device** if it will be conncected by USB or **Reomte Machine** if will be by WiFi.
 4. Select Start Debugging if you want to bew see the prints console from Unity
 
 
@@ -66,14 +66,12 @@ Capabilities needed on Unity
 ## Common bugs:
 
 * The camera stops, but the UI works: There is something wrong on the OnFrameAquired function. There are some methods can only be called from the main thread.
-"Constructors and field initializers will be executed from the loading thread when loading a scene. Don't use this function in the constructor or field initializers, instead move initialization code to the Awake or Start function. "
+"Constructors and field initializers will be executed from the loading thread when loading a scene. Don't use this function in the constructor or field initializers, instead move initialization code to the Awake or Start function."
+* _"DllNotFoundException> opencvforunity"_: The DLL library is not loaded. Ensure the DLL in the **WSA** (not in the Windows) folder was loaded in Unity.
 
 * Seeing the webcam image and not the hololens cam: you should build the to se the hololens cameras. If you run from the holographic emulation you will always see the webcam render. Furthermor willl run always the Update function and all the code which is under 
 * Dont see any change after the unity build: Ensure you add the new scene to the Build Settings
-* The holographic emulator never connects
-* Release x86
-* Is it on?
-* Is the hololens plugged?
+* The holographic emulator never connect: Is by Release - x86, On and is the Hololens plugged?
 
 ## Debug the builded Unity Hololens project
 
@@ -86,5 +84,6 @@ Capabilities needed on Unity
 [OpenCVForUnity]:https://assetstore.unity.com/packages/tools/integration/opencv-for-unity-21088
 [CameraStream]:https://github.com/VulcanTechnologies/HoloLensCameraStream
 [LinkTiberio]:https://sistemasacademico.uniandes.edu.co/~jhernand/dokuwiki/doku.php
+[HololensOpenCV]:https://github.com/EnoxSoftware/HoloLensWithOpenCVForUnityExample
 
 2018, Universidad de los Andes - Teknische Universität Kaiserslautern
